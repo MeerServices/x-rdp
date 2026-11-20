@@ -687,7 +687,7 @@ header{position:sticky}.mx{display:none;position:absolute;right:12px;top:100%;ma
 <script src="fbshim.js"></script>
 <script>if("serviceWorker" in navigator)navigator.serviceWorker.register("sw.js").catch(()=>{})</script>
 <script>
-const APPV='101';const KEY='xcube-rdp-v2',OLDKEY='xcube-rdp-v1',CRD='https://remotedesktop.google.com/access',BASE=CRD+'/session/';
+const APPV='102';const KEY='xcube-rdp-v2',OLDKEY='xcube-rdp-v1',CRD='https://remotedesktop.google.com/access',BASE=CRD+'/session/';
 const COLORS=[['#ff2d85','Roze'],['#8b6cff','Paars'],['#3ee0a1','Groen'],['#ffb547','Oranje'],['#38c8ff','Blauw'],['#ff5a6e','Rood'],['#2ee6d6','Turquoise']];
 const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
 const uid=()=>Math.random().toString(36).slice(2,10);
@@ -1788,18 +1788,24 @@ const jina=u=>fetch('https://r.jina.ai/'+u,{headers:{'Accept':'text/plain'}}).th
 const tmo=(p,ms)=>Promise.race([p,new Promise((_,j)=>setTimeout(()=>j(new Error('timeout')),ms))]);
 function wfQuery(){const F=$('#fGrp');return [F.gname.value.trim(),F.gloc.value.trim(),F.gland.value.trim()].filter((x,i,a)=>x&&a.findIndex(y=>y.toLowerCase()===x.toLowerCase())===i).join(' ')}
 function wfHost(u){try{return new URL(u).hostname.replace(/^www\./,'')}catch(e){return u}}
-const WF_SKIP=/(^|\.)(google\.|youtube\.|facebook\.|instagram\.|linkedin\.|twitter\.|x\.com$|wikipedia\.|tripadvisor\.|duckduckgo\.|bing\.|yelp\.|booking\.|openstreetmap\.)/i;
-async function wfSearch(q){const out=[];
+const WF_SKIP=/(^|\.)(google\.|youtube\.|facebook\.|instagram\.|linkedin\.|twitter\.|x\.com$|wikipedia\.|tripadvisor\.|duckduckgo\.|bing\.|microsoft\.|msn\.|yelp\.|booking\.|openstreetmap\.|apple\.com$)/i;
+function bingLinks(t){const o=[];for(const m of t.matchAll(/\[([^\]]{2,160})\]\((https:\/\/www\.bing\.com\/ck\/a\?[^)\s]+)\)/g)){const u=(m[2].match(/[?&]u=a1([^&]+)/)||[])[1];if(!u||/^Meer informatie|^Learn more/i.test(m[1]))continue;try{o.push({t:m[1],u:atob(u.replace(/-/g,'+').replace(/_/g,'/'))})}catch(e){}}return o}
+const bing=q=>tmo(jina('https://www.bing.com/search?setlang=nl&cc=NL&q='+encodeURIComponent(q)),15000);
+function wfSnip(q){WF.snip=[];const keep=t=>{WF.snip=WF.snip.concat(wfAddrs(t.replace(/\]\([^)]*\)/g,']')))};
+  return Promise.all([bing(q+' adres').then(keep).catch(()=>{})])}
+async function wfSearch(q){const out=[];const add=(u,t,src)=>{let h;try{h=new URL(u)}catch(e){return}if(!/^https?:$/.test(h.protocol)||WF_SKIP.test(h.hostname))return;out.push({u:h.origin+(h.pathname.length>1?h.pathname:'/'),t:t.replace(/[*_#]/g,'').trim(),src})};
+  const bg=bing(q).then(t=>{bingLinks(t).slice(0,8).forEach(o=>add(o.u,o.t,'web2'))}).catch(()=>{});const sn=wfSnip(q);
   const ddg=tmo(jina('https://html.duckduckgo.com/html/?q='+encodeURIComponent(q)),15000).then(t=>{const seen=new Set();
     for(const m of t.matchAll(/\[([^\]]{2,140})\]\((https?:\/\/[^)\s]+)\)/g)){let u=m[2];const ud=u.match(/[?&]uddg=([^&]+)/);if(ud)u=decodeURIComponent(ud[1]);
       if(/duckduckgo\.com/.test(u))continue;let h;try{h=new URL(u)}catch(e){continue}if(WF_SKIP.test(h.hostname))continue;const k=h.hostname.replace(/^www\./,'');if(seen.has(k))continue;seen.add(k);
       out.push({u:h.origin+(h.pathname.length>1?h.pathname:'/'),t:m[1].replace(/[*_#]/g,'').trim(),src:'web'});if(seen.size>=5)break}}).catch(()=>{});
   const osm=tmo(fetch('https://nominatim.openstreetmap.org/search?format=jsonv2&limit=3&extratags=1&addressdetails=1&accept-language='+(LANG==='en'?'en':'nl')+'&q='+encodeURIComponent(q)).then(r=>r.json()),12000).then(js=>{(js||[]).forEach(o=>{const x=o.extratags||{},w=x.website||x['contact:website']||x.url;
       if(w){let u=/^https?:/.test(w)?w:'https://'+w;try{u=new URL(u).origin+'/'}catch(e){}out.push({u,t:o.display_name,src:'osm'})}if(o.address)WF.osm=(WF.osm||[]).concat([osmAddr(o.address)].filter(Boolean))})}).catch(()=>{});
-  await Promise.all([ddg,osm]);out.sort((a,b)=>(a.src==='osm')-(b.src==='osm'));const seen=new Set();return out.filter(o=>{const k=wfHost(o.u);if(seen.has(k))return false;seen.add(k);return true}).slice(0,6)}
+  await Promise.all([ddg,osm,bg,sn]);const rk={web:0,web2:1,osm:2};out.sort((a,b)=>rk[a.src]-rk[b.src]);const seen=new Set();return out.filter(o=>{const k=wfHost(o.u);if(seen.has(k))return false;seen.add(k);return true}).slice(0,6)}
 function osmAddr(a){const st=[a.road,a.house_number].filter(Boolean).join(' '),city=a.city||a.town||a.village||a.municipality||'';if(!st||!city)return '';return {addr:[st,[a.postcode,city].filter(Boolean).join(' ')].join(', '),city,land:a.country||''}}
 async function wfTest(u){try{await tmo(fetch(u,{mode:'no-cors',cache:'no-store'}),9000);return true}catch(e){return false}}
 function wfAddrs(t){const res=[],add=(a,c)=>{a=a.replace(/\s+/g,' ').replace(/^[\s,:;|*•-]+|[\s,:;|*•-]+$/g,'').trim();if(a.length<8||a.length>110||/postbus|p\.?\s?o\.?\s?box|postfach|boîte postale/i.test(a))return;if(!res.some(x=>x.addr.toLowerCase()===a.toLowerCase()))res.push({addr:a,city:(c||'').trim()})};
+  for(const m of t.matchAll(/google\.[a-z.]+\/maps[^)\s"']*?[?&](?:destination|daddr|q|query)=([^&)\s"']+)/gi)){let a='';try{a=decodeURIComponent(m[1].replace(/\+/g,' '))}catch(e){}if(/\d/.test(a)&&/,/.test(a))add(a,(a.split(',')[1]||'').replace(/^[\s\dA-Z]{4,8}\s/,''))}
   t=t.replace(/\[([^\]]*)\]\([^)]*\)/g,'$1').replace(/[*_`#>]/g,' ').replace(/\\n|\r/g,'\n');
   const STR="[A-ZÀ-Ý][A-Za-zÀ-ÿ'.\\-]+(?:[ \\-][A-Za-zÀ-ÿ'.\\-]+){0,4}";
   const re1=new RegExp('('+STR+'\\s\\d{1,5}[a-zA-Z]?(?:[-/ ]\\d{1,4}[a-zA-Z]?)?)\\s*[,\\n|]?\\s*((?:[A-Z]{1,2}-?\\s?)?\\d{4}\\s?[A-Z]{2}|(?:[A-Z]{1,2}-?\\s?)?\\d{4,5})\\s+([A-ZÀ-Ý][A-Za-zÀ-ÿ\\-]+(?:[ \\-][A-ZÀ-Ý(][A-Za-zÀ-ÿ\\-)]+){0,2})','g');
@@ -1813,24 +1819,25 @@ async function wfScan(u){const host=wfHost(u);let txt='';try{txt=await tmo(jina(
   const seen=new Set();return all.filter(a=>{const k=a.addr.toLowerCase();if(seen.has(k))return false;seen.add(k);return true}).slice(0,6)}
 function wfBox(id,html){const b=$(id);b.innerHTML=html;b.classList.toggle('on',!!html)}
 function wfAddrShow(list,host){const F=$('#fGrp');
-  if(!list||!list.length){wfBox('#gAddrOut',`<span class="wst bad">${L('Geen adres gevonden op','No address found on')} ${esc(host||L('de website','the website'))}.${esc(wfErr())}</span>`);return}
-  wfBox('#gAddrOut',`<span class="wst">${L('Adresvoorstel — tik om in te vullen:','Address suggestion — tap to fill in:')}</span>`+list.map((a,i)=>`<button type="button" class="ghost wsug" data-wa="${i}"><span>📍</span><span>${esc(a.addr)}</span></button>`).join(''));
+  const gm=`<span class="wl"><a href="${esc(launch(mapsUrl(wfQuery())))}" target="_blank" rel="noopener">${L('Adres zoeken in Google Maps','Look up the address in Google Maps')} ↗</a></span>`;
+  if(!list||!list.length){wfBox('#gAddrOut',`<span class="wst bad">${L('Geen adres gevonden op','No address found on')} ${esc(host||L('de website','the website'))}.${esc(wfErr())}</span>${gm}`);return}
+  wfBox('#gAddrOut',`<span class="wst">${L('Adresvoorstel — tik om in te vullen:','Address suggestion — tap to fill in:')}</span>`+list.map((a,i)=>`<button type="button" class="ghost wsug" data-wa="${i}"><span>📍</span><span>${esc(a.addr)}</span></button>`).join('')+gm);
   $$('#gAddrOut [data-wa]').forEach(b=>b.onclick=()=>{const a=list[+b.dataset.wa];F.gaddr.value=a.addr;if(!F.gloc.value.trim()&&a.city)F.gloc.value=a.city;if(!F.gland.value.trim()&&a.land)F.gland.value=a.land;gMapUpd();$$('#gAddrOut .wsug').forEach(x=>x.classList.toggle('on',x===b));toast(L('Adres ingevuld','Address filled in'))})}
 async function wfCheck(u,seq){const F=$('#fGrp'),host=wfHost(u);
   wfBox('#gAddrOut',`<span class="wst">⏳ ${L('Website testen…','Testing website…')}</span>`);
   const ok=await wfTest(u);if(seq!==WF.seq)return;
   const st=$('#gWebOut .wtest');if(st){st.className='wst wtest '+(ok?'ok':'bad');st.innerHTML=ok?`✓ ${esc(host)} ${L('is bereikbaar','is reachable')} · <a href="${esc(launch(u))}" target="_blank" rel="noopener">${L('openen','open')} ↗</a>`:`⚠ ${esc(host)} ${L('reageert niet','does not respond')} · <a href="${esc(launch(u))}" target="_blank" rel="noopener">${L('toch openen','open anyway')} ↗</a>`}
   wfBox('#gAddrOut',`<span class="wst">⏳ ${L('Website doorzoeken naar een adres…','Searching the website for an address…')}</span>`);
-  let list=await wfScan(u);if(seq!==WF.seq)return;list=(list||[]).concat(WF.osm||[]);const seen=new Set();list=list.filter(a=>{const k=a.addr.toLowerCase();if(seen.has(k))return false;seen.add(k);return true});
+  let list=await wfScan(u);if(seq!==WF.seq)return;list=(list||[]).concat(WF.snip||[],WF.osm||[]);const seen=new Set(),nk=a=>a.toLowerCase().replace(/[^a-z0-9]/g,'');list=list.filter(a=>{const k=nk(a.addr);if([...seen].some(x=>k.startsWith(x)||x.startsWith(k)))return false;seen.add(k);return true});const city=(F.gloc.value||'').trim().toLowerCase();if(city)list.sort((a,b)=>(b.addr.toLowerCase().includes(city))-(a.addr.toLowerCase().includes(city)));
   wfAddrShow(list,host)}
 function wfStatus(){return `<span class="wst wtest">⏳ ${L('Testen…','Testing…')}</span>`}
 $('#gWebTest').onclick=()=>{const F=$('#fGrp');let u=F.gweb.value.trim();if(!u){toast(L('Vul eerst een website in of tik op Zoeken','Enter a website first or tap Search'));return}if(!/^https?:\/\//i.test(u))u=F.gweb.value='https://'+u;
-  const seq=++WF.seq;WF.osm=[];WF.err=0;wfBox('#gWebOut',wfStatus());wfCheck(u,seq)};
+  const seq=++WF.seq;WF.osm=[];WF.err=0;wfBox('#gWebOut',wfStatus());const q=wfQuery();(q?wfSnip(q):Promise.resolve()).then(()=>{if(seq===WF.seq)wfCheck(u,seq)})};
 $('#gWebFind').onclick=async()=>{const F=$('#fGrp'),q=wfQuery();if(!q){toast(L('Vul eerst een naam of plaats in','Enter a name or place first'));return}
   const seq=++WF.seq;WF.osm=[];WF.err=0;const gl=`<a href="${esc(launch('https://www.google.com/search?q='+encodeURIComponent(q)))}" target="_blank" rel="noopener">${L('Zelf zoeken bij Google','Search Google yourself')} ↗</a>`;
   wfBox('#gWebOut',`<span class="wst">⏳ ${L('Zoeken naar','Searching for')} "${esc(q)}"…</span>`);wfBox('#gAddrOut','');
   const res=await wfSearch(q);if(seq!==WF.seq)return;
-  if(!res.length){wfBox('#gWebOut',`<span class="wst bad">${L('Geen website gevonden. Plak de link zelf en tik op Test.','No website found. Paste the link yourself and tap Test.')}${esc(wfErr())}</span><span class="wl">${gl}</span>`);if((WF.osm||[]).length)wfAddrShow(WF.osm,'OpenStreetMap');return}
+  if(!res.length){wfBox('#gWebOut',`<span class="wst bad">${L('Geen website gevonden. Plak de link zelf en tik op Test.','No website found. Paste the link yourself and tap Test.')}${esc(wfErr())}</span><span class="wl">${gl}</span>`);wfAddrShow((WF.snip||[]).concat(WF.osm||[]),'');return}
   const pick=u=>{F.gweb.value=u;$$('#gWebOut .wsug').forEach(x=>x.classList.toggle('on',x.dataset.wu===u));const s=$('#gWebOut .wtest');if(s)s.outerHTML=wfStatus();else $('#gWebOut').insertAdjacentHTML('afterbegin',wfStatus());const sq=++WF.seq;wfCheck(u,sq)};
   wfBox('#gWebOut',`<span class="wst">${L('Gevonden websites — tik om een andere te kiezen:','Websites found — tap to pick another:')}</span>`+res.map(o=>`<button type="button" class="ghost wsug" data-wu="${esc(o.u)}"><img src="https://www.google.com/s2/favicons?sz=32&domain=${encodeURIComponent(wfHost(o.u))}" alt=""><span><b>${esc(wfHost(o.u))}</b><small>${esc(o.t)}</small></span></button>`).join('')+`<span class="wl">${gl}</span>`);
   $$('#gWebOut [data-wu]').forEach(b=>b.onclick=()=>pick(b.dataset.wu));
