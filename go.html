@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="nl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow"><meta name="referrer" content="no-referrer">
+<title>X-RDP · doorsturen</title>
+<style>body{margin:0;min-height:100vh;display:grid;place-items:center;background:#120a2e;color:#fff;font:16px/1.45 system-ui,sans-serif}
+.c{max-width:440px;padding:28px 22px;text-align:center}a,button{display:block;width:100%;box-sizing:border-box;margin:10px 0;padding:14px;border-radius:12px;border:1px solid #ffffff33;background:#ffffff12;color:#fff;font:inherit;text-decoration:none;cursor:pointer}
+.p{background:#ff2d85;border-color:#ff2d85;font-weight:600}small{opacity:.7;display:block;margin-top:8px}</style></head>
+<body><div class="c"><h2>X-RDP</h2><p id="m">Bezig met openen…</p>
+<a class="p" id="go" href="#">Openen</a><a id="raw" href="#" rel="noopener">Openen in deze browser</a><button id="cp" type="button">Link kopiëren</button>
+<small id="pcHelp" style="display:none">Werkt de roze knop niet op de pc? Start dan één keer <b>X-RDP.exe</b> op deze pc. Die zorgt ervoor dat X-RDP-links in het juiste Chrome-profiel openen. Vraagt de browser of hij X-RDP mag openen, kies dan <b>Openen</b> (en eventueel "altijd toestaan").</small>
+<small>Deze pagina stuurt een Remote Desktop-, Google- of UniFi-link door naar de browser die je in X-RDP bij het profiel hebt gekozen. Er wordt niets opgeslagen.</small></div>
+<script>
+(function(){
+  var q=new URLSearchParams(location.search),u=q.get('u')||'',pkg=q.get('pkg')||'',pc=q.get('pc')==='1',m=document.getElementById('m');
+  var ok=false;try{var x=new URL(u);ok=x.protocol==='https:'&&(/(^|\.)google\.com$/.test(x.hostname)||x.hostname==='unifi.ui.com')}catch(e){}
+  if(!/^[A-Za-z][A-Za-z0-9_]*(\.[A-Za-z0-9_]+)+$/.test(pkg))pkg='';
+  if(!ok){m.textContent='Ongeldige link.';['go','raw','cp'].forEach(function(i){document.getElementById(i).style.display='none'});return}
+  var p=new URL(u),target,label;
+  if(pc){var pb=(q.get('pb')||'chrome').replace(/[^a-z-]/g,''),pp=(q.get('pp')||'').slice(0,80);
+    var o={u:u,p:pp,b:pb};if(q.get('f')==='1')o.f='1';target='xrdp://open?'+new URLSearchParams(o).toString();label='Openen in '+(pp?'profiel "'+pp+'"':pb);document.getElementById('pcHelp').style.display='block'}
+  else{target=pkg?'intent://'+p.host+p.pathname+p.search+'#Intent;scheme=https;package='+pkg+';S.browser_fallback_url='+encodeURIComponent(u)+';end':u;label=pkg?'Openen in '+pkg:'Openen'}
+  var go=document.getElementById('go');go.href=target;go.textContent=label;
+  document.getElementById('raw').href=u;
+  document.getElementById('cp').onclick=function(){navigator.clipboard&&navigator.clipboard.writeText(u).then(function(){m.textContent='Link gekopieerd. Plak hem in de juiste browser.'})};
+  var tried=false,closeSoon=function(){if(!tried)return;setTimeout(function(){window.close()},250)};
+  window.addEventListener('blur',closeSoon);document.addEventListener('visibilitychange',function(){if(document.hidden)closeSoon()});
+  go.addEventListener('click',function(){tried=true});
+  if(pc){setTimeout(function(){tried=true;location.href=target},60);m.textContent=label+'… Dit tabblad sluit vanzelf. Vraagt Chrome of hij X-RDP mag openen? Zet het vinkje aan en kies Openen, dan gaat het voortaan zonder vragen.'}
+  else if(/Android/i.test(navigator.userAgent)){setTimeout(function(){tried=true;location.href=target},60);m.textContent='Bezig met openen in '+(pkg||'de browser')+'… Gebeurt er niets? Tik op de roze knop.'}
+  else{m.textContent='Kies hoe je de link wilt openen.'}
+})();
+</script></body></html>
