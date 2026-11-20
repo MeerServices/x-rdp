@@ -1,0 +1,17 @@
+{
+  "name": "X-RDP",
+  "short_name": "X-RDP",
+  "description": "Snel verbinden met je X-Cubes via Chrome Remote Desktop.",
+  "lang": "nl",
+  "id": "./",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#120a2e",
+  "theme_color": "#120a2e",
+  "icons": [
+    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
