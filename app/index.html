@@ -337,7 +337,8 @@ header{position:sticky}.mx{display:none;position:absolute;right:12px;top:100%;ma
 .grp.col .gh{padding-bottom:2px}
 .grp.gdropx{outline:2px dashed var(--accent);outline-offset:3px;background:color-mix(in srgb,var(--accent) 10%,transparent)}
 .grp.act{border:2px solid var(--c);box-shadow:0 0 0 3px color-mix(in srgb,var(--c) 25%,transparent),0 0 22px color-mix(in srgb,var(--c) 35%,transparent);padding:9px}
-.grp .gn{font:400 16px 'Russo One',Outfit,sans-serif}.grp .gc{color:var(--muted);font-size:13px;margin-left:auto;white-space:nowrap;flex:none}.gh .gn{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.grp .gn{font:400 16px 'Russo One',Outfit,sans-serif}.grp .gmw{position:relative;flex:none;display:inline-flex}.gmb{font-size:17px}.gmm{left:auto;right:0;top:calc(100% + 6px);bottom:auto;z-index:30;min-width:260px;cursor:default}.gmm.open{display:block}.gmm .fi{color:var(--text);text-decoration:none;font:inherit;font-size:14px;cursor:pointer}.gmm .fi:hover{background:rgba(255,255,255,.06)}.gmm .di2{display:inline-flex;width:22px;justify-content:center;flex:none}.gmm .di2 svg{width:18px;height:18px}.gmm .t{display:flex;flex-direction:column;min-width:0}.gmm small{color:var(--muted);font-size:12px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:220px}
+.gc{color:var(--muted);font-size:13px;margin-left:auto;white-space:nowrap;flex:none}.gh .gn{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .grp .gtog{background:none;border:none;color:var(--text);padding:2px 6px;min-height:0!important;font-size:14px}
 .grp .gb{padding:4px 9px;min-height:0!important}
 .grp .gl2{flex:none!important;width:38px;height:32px;padding:0;justify-content:center;min-height:0!important}
@@ -687,7 +688,7 @@ header{position:sticky}.mx{display:none;position:absolute;right:12px;top:100%;ma
 <script src="fbshim.js"></script>
 <script>if("serviceWorker" in navigator)navigator.serviceWorker.register("sw.js").catch(()=>{})</script>
 <script>
-const APPV='106';const KEY='xcube-rdp-v2',OLDKEY='xcube-rdp-v1',CRD='https://remotedesktop.google.com/access',BASE=CRD+'/session/';
+const APPV='107';const KEY='xcube-rdp-v2',OLDKEY='xcube-rdp-v1',CRD='https://remotedesktop.google.com/access',BASE=CRD+'/session/';
 const COLORS=[['#ff2d85','Roze'],['#8b6cff','Paars'],['#3ee0a1','Groen'],['#ffb547','Oranje'],['#38c8ff','Blauw'],['#ff5a6e','Rood'],['#2ee6d6','Turquoise']];
 const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
 const uid=()=>Math.random().toString(36).slice(2,10);
@@ -1059,7 +1060,9 @@ function gridHTML(p){let h='',n=0;const done=new Set();S.collapsed=S.collapsed||
     const members=shown.filter(j=>(j.group||'').trim().toLowerCase()===k),col=!!S.collapsed[p.id+'|'+k];
     h+=`<section class="grp ${col?'col':''} ${actGrp===p.id+'|'+k?'act':''}" data-grp="${esc(g)}" style="--c:${gColor(g)}"><div class="gh"><button type="button" class="gtog" data-gact="tog" title="${L('In-/uitklappen','Collapse/expand')}">${col?'▸':'▾'}</button>
       ${(()=>{const m=gmeta(p,g),e=m.icon&&libOf(p).find(x=>x.id===m.icon);return e?`<span class="gi gie" data-gact="ren" title="${L('Groep bewerken','Edit group')}"><img src="${e.img}" alt=""><span class="pen">✎</span></span>`:(col?`<span class="gi gie" data-gact="ren" title="${L('Groep bewerken','Edit group')}">📁<span class="pen">✎</span></span>`:'')})()}<b class="gn">${esc(g)}</b>${(()=>{const m=gmeta(p,g);return (m.icon&&libOf(p).some(x=>x.id===m.icon))||col?'':`<span class="gpen" data-gact="ren" title="${L('Groep bewerken','Edit group')}">✎</span>`})()}<span class="gc"><span class="gcn" title="${members.length} ${esc(members.length===1?term().one:term().many)}"><span class="ci"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d='M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z'/></svg></span><b>${members.length}</b></span><span class="gcn" title="${L('Computers','Computers')}"><span class="ci"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x='3' y='4' width='18' height='12' rx='2'/><path d='M8 20h8M12 16v4'/></svg></span><b>${members.reduce((a,i)=>a+devsOf(i).length,0)}</b></span></span>
-      ${(()=>{const m=gmeta(p,g);const mq=[m.addr||m.loc,m.land].filter(Boolean).join(', ');return (mq?`<a class="btn uni gl2" href="${esc(mapsHref((mq)))}" target="_blank" rel="noopener" title="Google Maps: ${esc(mq)}">${ICO_MAP}</a>`:'')+(m.web?`<a class="btn uni gl2" href="${esc(launch(m.web))}" target="_blank" rel="noopener" title="${L('Website','Website')}">${ICO_WEB}</a>`:'')+(m.adv?`<a class="btn uni gl2" href="${esc(launch(m.adv))}" target="_blank" rel="noopener" title="Advertising">${ICO_ADV}</a>`:'')})()}
+      ${(()=>{const m=gmeta(p,g);const mq=[m.addr||m.loc,m.land].filter(Boolean).join(', ');const it=(h,ic,t,sub)=>`<a class="fi" href="${esc(h)}" target="_blank" rel="noopener"><span class="di2">${ic}</span><span class="t"><b>${t}</b><small>${esc(sub)}</small></span></a>`;
+        const li=(mq?it(mapsHref(mq),ICO_MAP,L('Adres','Address'),mq):'')+(m.web?it(launch(m.web),ICO_WEB,L('Website','Website'),m.web.replace(/^https?:\/\/(www\.)?/,'')):'')+(m.adv?it(launch(m.adv),ICO_ADV,L('Advertentielink','Advertising link'),m.adv.replace(/^https?:\/\/(www\.)?/,'')):'');
+        return `<span class="gmw"><button type="button" class="btn uni gl2 gmb" data-gm title="${L('Adres, website en advertentie','Address, website and advertising')}" aria-label="Menu">☰</button><div class="footm gmm">${li}${li?'<hr>':''}<button type="button" class="fi" data-gact="ren"><span class="di2">✎</span><span class="t"><b>${L('Groep bewerken','Edit group')}</b></span></button></div></span>`})()}
 </div>
       <div class="gbody">${col?'':members.map(j=>cardHTML(j,shown.indexOf(j),p)).join('')}</div></section>`}
   return h}
@@ -1138,7 +1141,7 @@ function chipNav(){const c=$('#chips'),w=$('#chipWrap');if(!c||!w)return;w.class
   c.addEventListener('click',e=>{if(moved){e.stopPropagation();e.preventDefault();moved=false}},true);
   $$('#chipWrap .cnav').forEach(b=>b.onclick=()=>{c.scrollLeft+=+b.dataset.cn*Math.max(160,c.clientWidth*.7)})}
 $('#tagMenu').addEventListener('click',e=>{const b=e.target.closest('[data-tag]');if(!b)return;$('#q').value=b.dataset.tag?'#'+b.dataset.tag:'';$('#tagMenu').classList.remove('open');sel=0;render()});
-document.addEventListener('click',e=>{if(!e.target.closest('#tagMenu,#tagDD,#statMenu,#statDD'))$$('.tagmenu.open').forEach(x=>x.classList.remove('open'))});
+document.addEventListener('click',e=>{if(!e.target.closest('.gmw'))$$('.gmm.open').forEach(x=>x.classList.remove('open'));if(!e.target.closest('#tagMenu,#tagDD,#statMenu,#statDD'))$$('.tagmenu.open').forEach(x=>x.classList.remove('open'))});
 $('#qClr').onclick=()=>{$('#q').value='';qMark();sel=0;render();$('#q').focus()};
 $('#fSort').onchange=()=>{S.sort=$('#fSort').value;saveQuiet();render()};
 VTB.onclick=()=>{S.view=S.view==='list'?'grid':'list';saveQuiet();render()};
@@ -1642,7 +1645,10 @@ $('#pImpGo').onclick=()=>{if(!pImpData)return;let added=0,replaced=0,locs=0;
 function askText(head,label,def,hint,cb){$('#askHead').textContent=head;$('#askLabel').textContent=label;$('#askInput').value=def||'';$('#askHint').textContent=hint||'';
   $('#fAsk').onsubmit=e=>{e.preventDefault();const v=$('#askInput').value.trim();if(!v)return;$('#dlgAsk').close();cb(v)};$('#dlgAsk').showModal();setTimeout(()=>$('#askInput').select(),30)}
 $('#grid').addEventListener('click',e=>{const sec=e.target.closest&&e.target.closest('.grp[data-grp]');if(!sec)return;const k=cur+'|'+sec.dataset.grp.toLowerCase();if(actGrp===k)return;actGrp=k;$$('.grp.act').forEach(x=>x.classList.remove('act'));sec.classList.add('act')},true);
-$('#grid').addEventListener('click',e=>{let b=e.target.closest('[data-gact]');if(!b){const gh=e.target.closest('.gh');if(!gh||e.target.closest('a,button'))return;b=gh.querySelector('[data-gact=tog]');if(!b)return}e.stopPropagation();const sec=b.closest('.grp'),g=sec.dataset.grp,k=g.toLowerCase(),key=cur+'|'+k;
+$('#grid').addEventListener('click',e=>{const gmb=e.target.closest('[data-gm]');if(gmb){e.stopPropagation();const mm=gmb.nextElementSibling,o=mm.classList.contains('open');$$('.gmm.open').forEach(x=>x.classList.remove('open'));if(!o)mm.classList.add('open');return}
+  if(e.target.closest('.gmm a')){$$('.gmm.open').forEach(x=>x.classList.remove('open'));e.stopPropagation();return}
+  {const mi=e.target.closest('.gmm [data-gact]');if(mi)$$('.gmm.open').forEach(x=>x.classList.remove('open'))}
+  let b=e.target.closest('[data-gact]');if(!b){const gh=e.target.closest('.gh');if(!gh||e.target.closest('a,button'))return;b=gh.querySelector('[data-gact=tog]');if(!b)return}e.stopPropagation();const sec=b.closest('.grp'),g=sec.dataset.grp,k=g.toLowerCase(),key=cur+'|'+k;
   const members=mine().filter(i=>(i.group||'').trim().toLowerCase()===k);
   if(b.dataset.gact==='tog'){S.collapsed=S.collapsed||{};if(S.collapsed[key])delete S.collapsed[key];else S.collapsed[key]=1;saveQuiet();render()}
   else if(b.dataset.gact==='ren')openGrp(g);
