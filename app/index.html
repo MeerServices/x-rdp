@@ -51,7 +51,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--accent);box-shadow:0 
 .chip.on{background:color-mix(in srgb,var(--accent) 18%,var(--panel));border-color:var(--accent);color:var(--text)}
 .chip b{font-weight:600;margin-left:4px}
 main .wrap{padding-top:18px}
-.meta{display:flex;justify-content:space-between;align-items:center;color:var(--muted);font-size:13px;margin-bottom:12px;gap:10px;flex-wrap:wrap}
+.meta{display:flex;justify-content:space-between;align-items:center;color:var(--muted);font-size:13px;margin:8px 0 0;gap:10px;flex-wrap:wrap}
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,470px),1fr));gap:14px}
 .card{min-width:0;background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:14px;display:flex;flex-direction:column;gap:10px}
 .card:hover{border-color:color-mix(in srgb,var(--accent) 60%,var(--line))}
@@ -113,10 +113,10 @@ ol.steps{margin:0;padding-left:20px;font-size:13.5px;color:var(--muted)}ol.steps
 .pcard .ed{position:absolute;bottom:12px;right:12px;padding:4px 8px;font-size:12px}
 .pinbox{display:none;gap:8px;margin-top:20px;max-width:420px}.pinbox.on{display:grid}
 .pinbox .r{display:flex;gap:8px}.pinbox input{flex:1;font:20px 'JetBrains Mono',monospace;letter-spacing:6px;text-align:center}
-.cbar{display:none;align-items:center;gap:10px;flex-wrap:wrap;background:color-mix(in srgb,var(--warn) 14%,var(--panel));border:1px solid color-mix(in srgb,var(--warn) 45%,var(--line));border-radius:var(--r);padding:12px 14px;margin-bottom:14px;font-size:14px}
+.cbar{margin-top:8px;display:none;align-items:center;gap:10px;flex-wrap:wrap;background:color-mix(in srgb,var(--warn) 14%,var(--panel));border:1px solid color-mix(in srgb,var(--warn) 45%,var(--line));border-radius:var(--r);padding:12px 14px;margin-bottom:14px;font-size:14px}
 .cbar.on{display:flex}.cbar .t{flex:1;min-width:240px}.cbar code{font:12.5px 'JetBrains Mono',monospace;background:var(--panel2);padding:2px 6px;border-radius:5px}
 .bsel{display:inline-flex;align-items:center;gap:6px;font-size:13px;color:var(--muted)}.bsel select{padding:5px 8px;font-size:13px}
-.sbar{display:none;align-items:center;gap:12px;flex-wrap:wrap;background:var(--panel);border:1px solid var(--accent);border-radius:var(--r);padding:10px 14px;margin-bottom:14px}
+.sbar{margin-top:8px;display:none;align-items:center;gap:12px;flex-wrap:wrap;background:var(--panel);border:1px solid var(--accent);border-radius:var(--r);padding:10px 14px;margin-bottom:14px}
 .sbar.on{display:flex}.sall{display:flex;align-items:center;gap:8px;color:var(--text);font-size:14px;font-weight:600;cursor:pointer}
 .sbar input[type=checkbox],.pick input{width:19px;height:19px;accent-color:var(--accent);cursor:pointer;margin:0}
 button.danger:not(:disabled){border-color:var(--bad)}button:disabled{opacity:.45;cursor:default}
@@ -158,13 +158,13 @@ body.dragging .grid::before{content:attr(data-drophint);grid-column:1/-1;text-al
 label.sub2{font-size:12px;gap:4px}
 .hbtns{display:contents}
 .menub{display:inline-flex;font-size:20px;padding:6px 12px}
-header{position:relative}.mx{display:none;position:absolute;right:12px;top:100%;margin-top:6px;z-index:40;flex-direction:column;align-items:stretch;gap:6px;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:10px;min-width:220px;box-shadow:0 16px 40px rgba(5,0,30,.6)}
+header{position:sticky}.mx{display:none;position:absolute;right:12px;top:100%;margin-top:6px;z-index:40;flex-direction:column;align-items:stretch;gap:6px;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:10px;min-width:220px;box-shadow:0 16px 40px rgba(5,0,30,.6)}
 .hbtns.open .mx{display:flex}.mx button{justify-content:flex-start;text-align:left}
 #btnAdd{display:none!important}
 .syncb{padding:6px 10px;font-size:16px}.syncb[data-st=ok]{color:var(--ok)}.syncb[data-st=off],.syncb[data-st=err]{color:var(--warn)}.syncb[data-st=wait]{color:var(--muted)}
 @media (hover:none),(pointer:coarse){.desk{display:none!important}.search kbd{display:none}button,.btn{min-height:42px}.star{min-height:auto}}
 @media (max-width:760px){
-  header{position:static;backdrop-filter:none;-webkit-backdrop-filter:none;background:rgba(26,12,74,.92)}
+  header{position:sticky;backdrop-filter:none;-webkit-backdrop-filter:none;background:rgba(26,12,74,.98)}
   .wrap{padding:10px 12px}
   .top{gap:8px;flex-wrap:nowrap}
   .logo{font-size:15px;gap:8px;min-width:0}.logo svg{width:28px;height:28px;flex:none}.logo small{display:none}.logo>.ttl{white-space:nowrap;min-width:0}.logo>.ttl{overflow:visible}
@@ -179,7 +179,7 @@ header{position:relative}.mx{display:none;position:absolute;right:12px;top:100%;
   .bar select,.bar .seg{display:none}
   .bar.filt select{display:block}
   .chips{flex-wrap:nowrap;overflow-x:auto;padding-bottom:4px;scrollbar-width:none}.chips::-webkit-scrollbar{display:none}.chip{flex:none}
-  .meta>span:last-child{display:none}
+
   .grid{grid-template-columns:minmax(0,1fr);gap:12px}
   .actions>button{flex:none;width:46px;justify-content:center;padding:8px 0}
   main .wrap{padding-bottom:90px}
@@ -272,7 +272,7 @@ header{position:relative}.mx{display:none;position:absolute;right:12px;top:100%;
 .card .sub .tag{background:none;border:none;padding:0;margin:0;color:inherit;font:inherit}
 .tagmenu{display:none;position:absolute;z-index:35;max-width:min(420px,92vw);max-height:60vh;overflow:auto;flex-wrap:wrap;gap:6px;padding:10px;background:var(--panel);border:1px solid var(--line);border-radius:14px;box-shadow:0 16px 40px rgba(5,0,30,.6)}.tagmenu.open{display:flex}
 .tagmenu button{min-height:0!important;padding:5px 10px;border-radius:999px;border:1px solid var(--line);background:rgba(255,255,255,.05);color:var(--text);font-size:13px;cursor:pointer;display:inline-flex;gap:6px;align-items:center}.tagmenu button b{opacity:.6;font-weight:600}.tagmenu button:hover,.tagmenu button.on{border-color:var(--accent);background:rgba(255,45,133,.18)}.tagmenu .clr{flex-basis:100%;justify-content:center}
-.gcn{display:inline-flex;align-items:center;gap:3px;margin-right:9px;vertical-align:middle}.gcn .ci{display:inline-flex;opacity:.9}.gcn .ci svg{display:block}.gcn b{font-weight:600;color:var(--text)}
+.pcard .pn{display:flex;align-items:center;flex-wrap:wrap;gap:4px 12px}.pst{display:inline-flex;font-size:13px;font-weight:500;color:var(--muted)}.pst .gcn:last-child{margin-right:0}.gcn{display:inline-flex;align-items:center;gap:3px;margin-right:9px;vertical-align:middle}.gcn .ci{display:inline-flex;opacity:.9}.gcn .ci svg{display:block}.gcn b{font-weight:600;color:var(--text)}
 .chip .ci{display:inline-flex;opacity:.9;margin-right:2px}.chip .ci svg{display:block}.allc b{margin:0 8px 0 3px}.allc b:last-child{margin-right:0}.tagmenu .dot{margin-right:2px}
 .hlang{flex:none}.hlang button{padding:5px 9px!important;min-height:0!important;font-size:12px}
 .chip.ginfo{cursor:default;opacity:.9}.chip.ginfo:hover{border-color:var(--line)}
@@ -359,7 +359,6 @@ header{position:relative}.mx{display:none;position:absolute;right:12px;top:100%;
   <div class="lg">
     <div class="lgtop"><button type="button" class="helpb" id="btnHelp2" title="Uitleg"><svg width="44" height="44" viewBox="0 0 34 34" fill="none"><path d="M17 3 30 10v14L17 31 4 24V10z" fill="#fff" opacity=".08"/><path d="M17 3 30 10v14L17 31 4 24V10zM4 10l13 7 13-7M17 17v14" stroke="#fff" stroke-width="2" stroke-linejoin="round"/></svg><span class="hq">?</span></button><span class="lgname">X-RDP</span><div class="seg lang"><button data-lang="nl">NL</button><button data-lang="en">EN</button></div></div>
     <h1>Kies je profiel</h1>
-    <p class="lead">Elk profiel hoort bij een Google-account. De X-Cube's van dat profiel openen in Chrome Remote Desktop met het juiste account.</p>
     <div class="pgrid" id="plist"></div>
     <div class="pio"><button type="button" class="ghost" id="pExp">⇧ Profielen exporteren</button><button type="button" class="ghost" id="pImp">⇩ Profielen importeren</button></div>
     <div class="pinbox" id="pinbox">
@@ -411,19 +410,19 @@ header{position:relative}.mx{display:none;position:absolute;right:12px;top:100%;
       </select>
     </div>
     <div class="chipwrap" id="chipWrap"><button type="button" class="cnav l" data-cn="-1" aria-label="Terug">‹</button><div class="chips" id="chips"></div><button type="button" class="cnav r" data-cn="1" aria-label="Verder">›</button></div><div class="tagmenu" id="tagMenu"></div><div class="tagmenu" id="statMenu"></div>
+    <div class="cbar" id="cbar"></div>
+    <div class="sbar" id="sbar">
+      <label class="sall"><input type="checkbox" id="selAll"> <span id="selAllTxt">Alles selecteren</span></label>
+      <span id="selCount" class="hint"></span>
+      <span style="flex:1"></span>
+      <button id="selDel" class="danger" disabled>🗑 Verwijder geselecteerde</button>
+      <button id="selDone" class="ghost">Klaar</button>
+    </div>
+    <div class="meta"><span class="ml"><span id="count" hidden></span><button type="button" class="ghost gall" id="gAll"></button><button type="button" class="ghost gall" id="vTog"></button></span></div>
   </div>
 </header>
 
 <main id="main"><div class="wrap">
-  <div class="cbar" id="cbar"></div>
-  <div class="sbar" id="sbar">
-    <label class="sall"><input type="checkbox" id="selAll"> <span id="selAllTxt">Alles selecteren</span></label>
-    <span id="selCount" class="hint"></span>
-    <span style="flex:1"></span>
-    <button id="selDel" class="danger" disabled>🗑 Verwijder geselecteerde</button>
-    <button id="selDone" class="ghost">Klaar</button>
-  </div>
-  <div class="meta"><span class="ml"><span id="count"></span><button type="button" class="ghost gall" id="gAll"></button><button type="button" class="ghost gall" id="vTog"></button></span><span>Tip: <b>/</b> = zoeken · <b>↑↓</b> = kiezen · <b>Enter</b> = verbinden · sleep een apparaat uit Google op een tegel</span></div>
   <div class="grid" id="grid"></div>
 </div></main>
 
@@ -683,7 +682,7 @@ header{position:relative}.mx{display:none;position:absolute;right:12px;top:100%;
 <script src="fbshim.js"></script>
 <script>if("serviceWorker" in navigator)navigator.serviceWorker.register("sw.js").catch(()=>{})</script>
 <script>
-const APPV='97';const KEY='xcube-rdp-v2',OLDKEY='xcube-rdp-v1',CRD='https://remotedesktop.google.com/access',BASE=CRD+'/session/';
+const APPV='98';const KEY='xcube-rdp-v2',OLDKEY='xcube-rdp-v1',CRD='https://remotedesktop.google.com/access',BASE=CRD+'/session/';
 const COLORS=[['#ff2d85','Roze'],['#8b6cff','Paars'],['#3ee0a1','Groen'],['#ffb547','Oranje'],['#38c8ff','Blauw'],['#ff5a6e','Rood'],['#2ee6d6','Turquoise']];
 const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
 const uid=()=>Math.random().toString(36).slice(2,10);
@@ -769,13 +768,13 @@ $$('[data-close]').forEach(b=>b.onclick=()=>b.closest('dialog').close());
 
 /* ---------- inlogscherm ---------- */
 function showLogin(){$('#acctMenu').classList.remove('open');setTimeout(retr,0);cur=null;unlocked={};pending=null;pendingThen=null;$('#login').classList.add('on');$('#pinbox').classList.remove('on');renderProfiles()}
+const ICO_PIN=`<svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d='M12 21s-7-6.2-7-11a7 7 0 0 1 14 0c0 4.8-7 11-7 11z'/><circle cx='12' cy='10' r='2.5'/></svg>`,ICO_FOLD=`<svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d='M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z'/></svg>`,ICO_MON=`<svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x='3' y='4' width='18' height='12' rx='2'/><path d='M8 20h8M12 16v4'/></svg>`;
 function renderProfiles(){
   $('#plist').innerHTML=S.profiles.map(p=>{const n=S.items.filter(i=>i.profile===p.id).length;
     return `<div class="pcard" data-p="${p.id}" role="button" tabindex="0" draggable="true">
       ${p.pin?'<span class="lock" title="Pincode">🔒</span>':''}
       <button type="button" class="icob plogo" data-pedit="${p.id}" title="${L('Profiel bewerken','Edit profile')}">${avatar(p)}<span class="pen">✎</span></button>
-      <div><div class="pn">${esc(p.name)}</div><div class="pe">${esc(p.email)}</div></div>
-      <div class="pc pstats">${(()=>{const st=pStats(p);return `<span>${L('Groepen','Groups')}:</span><b>${st.g}</b><span>${L('Apparaten','Devices')}:</span><b>${st.x}</b><span>Computers:</span><b>${st.c}</b>`})()}</div>
+      <div><div class="pn"><span>${esc(p.name)}</span>${(()=>{const st=pStats(p);return `<span class="pst"><span class="gcn" title="${L('Groepen','Groups')}"><span class="ci">${ICO_PIN}</span><b>${st.g}</b></span><span class="gcn" title="${esc((p.term&&p.term.many)||'X-Cubes')}"><span class="ci">${ICO_FOLD}</span><b>${st.x}</b></span><span class="gcn" title="Computers"><span class="ci">${ICO_MON}</span><b>${st.c}</b></span></span>`})()}</div><div class="pe">${esc(p.email)}</div></div>
       </div>`}).join('')
    +`<button class="pcard add" id="pAdd"><span style="font-size:30px">+</span>Profiel toevoegen</button>`;
 }
