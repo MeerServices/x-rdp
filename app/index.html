@@ -40,7 +40,7 @@ button:hover,.btn:hover{border-color:var(--accent)}
 .search{position:relative}
 .search input{width:100%;padding:10px 12px 10px 38px}
 .search svg{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--muted)}
-.search input::-webkit-search-cancel-button{-webkit-appearance:none;appearance:none;display:none}.search .micb svg,.search .fbtn svg{display:block;width:18px;height:18px}.search .fbtn{right:44px;border-radius:50%;border:1px solid var(--line);background:rgba(255,255,255,.05);color:var(--text)}.search .qclr{right:44px!important}@media(min-width:761px){.search .fbtn{display:none!important}}.search .fbtn.fbtn{right:42px}.search .fbtn .fdot{top:2px!important;right:2px!important}.bar.filt .search .fbtn{border-color:var(--accent);color:var(--accent)}.search kbd{right:46px!important}
+.search input::-webkit-search-cancel-button{-webkit-appearance:none;appearance:none;display:none}.search .micb svg,.search .fbtn svg{display:block;width:18px;height:18px;position:static;left:auto;top:auto;transform:none}.search .fbtn{right:44px;border-radius:50%;border:1px solid var(--line);background:rgba(255,255,255,.05);color:var(--text)}.search .qclr{right:44px!important}@media(min-width:761px){.search .fbtn{display:none!important}}.search .fbtn.fbtn{right:42px}.search .fbtn .fdot{top:2px!important;right:2px!important}.bar.filt .search .fbtn{border-color:var(--accent);color:var(--accent)}.search kbd{right:46px!important}
 .search input{padding-right:84px!important;text-overflow:ellipsis}.search .qclr{position:absolute;right:6px;top:50%;transform:translateY(-50%);display:none;width:28px;height:28px;min-height:0!important;padding:0;border:none;border-radius:8px;background:rgba(255,255,255,.1);color:#fff;font-size:13px;cursor:pointer;place-items:center}.search .qclr:hover{background:var(--accent)}.search.has .qclr{display:grid}.search.has kbd{display:none!important}
 .search kbd{position:absolute;right:10px;top:50%;transform:translateY(-50%);font:12px 'JetBrains Mono',monospace;color:var(--muted);border:1px solid var(--line);border-radius:5px;padding:1px 6px}
 input,select,textarea{font:inherit;color:var(--text);background:var(--panel);border:1px solid var(--line);border-radius:9px;padding:9px 11px;outline:none}
@@ -347,7 +347,7 @@ header{position:sticky}.mx{display:none;position:absolute;right:12px;top:100%;ma
 .ugz.on{display:block}.ugz.over{background:color-mix(in srgb,var(--warn) 25%,rgba(26,12,74,.95))}
 @media (max-width:760px){.grp{padding:8px}.grp .gbody{grid-template-columns:minmax(0,1fr)}}
 .meta .ml{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
-.gall{padding:4px 12px;min-height:0!important;font-size:13px}
+.gall{padding:5px 11px;min-height:0!important;font-size:13px;flex:none;white-space:nowrap;font:inherit;font-size:13px}
 .vseg{display:inline-flex!important;margin-left:8px;border-radius:999px;overflow:hidden;border:1px solid var(--line);vertical-align:middle}.vseg button{padding:4px 12px!important;min-height:0!important;font-size:13px;border:none!important;border-radius:0!important;background:transparent;color:var(--text)}.vseg button.on{background:var(--accent);color:#fff}
 .err{color:var(--bad);font-size:13px;min-height:18px}
 </style>
@@ -391,9 +391,9 @@ header{position:sticky}.mx{display:none;position:absolute;right:12px;top:100%;ma
       </div>
       <button id="btnAdd" class="primary">+ X-Cube</button>
       <button id="sync" class="ghost syncb" data-st="local">💾</button>
-      <div class="seg lang hlang"><button data-lang="nl">NL</button><button data-lang="en">EN</button></div>
       <button id="btnWho" class="who ghost" title="Wissel van profiel"></button>
       <button id="btnMenu" class="ghost menub" aria-label="Menu">☰</button>
+      <div class="seg lang hlang"><button data-lang="nl">NL</button><button data-lang="en">EN</button></div>
     </div>
     <div class="bar">
       <div class="search">
@@ -418,7 +418,7 @@ header{position:sticky}.mx{display:none;position:absolute;right:12px;top:100%;ma
       <button id="selDel" class="danger" disabled>🗑 Verwijder geselecteerde</button>
       <button id="selDone" class="ghost">Klaar</button>
     </div>
-    <div class="meta"><span class="ml"><span id="count" hidden></span><button type="button" class="ghost gall" id="gAll"></button><button type="button" class="ghost gall" id="vTog"></button></span></div>
+    <span id="count" hidden></span>
   </div>
 </header>
 
@@ -682,7 +682,7 @@ header{position:sticky}.mx{display:none;position:absolute;right:12px;top:100%;ma
 <script src="fbshim.js"></script>
 <script>if("serviceWorker" in navigator)navigator.serviceWorker.register("sw.js").catch(()=>{})</script>
 <script>
-const APPV='98';const KEY='xcube-rdp-v2',OLDKEY='xcube-rdp-v1',CRD='https://remotedesktop.google.com/access',BASE=CRD+'/session/';
+const APPV='99';const KEY='xcube-rdp-v2',OLDKEY='xcube-rdp-v1',CRD='https://remotedesktop.google.com/access',BASE=CRD+'/session/';
 const COLORS=[['#ff2d85','Roze'],['#8b6cff','Paars'],['#3ee0a1','Groen'],['#ffb547','Oranje'],['#38c8ff','Blauw'],['#ff5a6e','Rood'],['#2ee6d6','Turquoise']];
 const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
 const uid=()=>Math.random().toString(36).slice(2,10);
@@ -768,6 +768,7 @@ $$('[data-close]').forEach(b=>b.onclick=()=>b.closest('dialog').close());
 
 /* ---------- inlogscherm ---------- */
 function showLogin(){$('#acctMenu').classList.remove('open');setTimeout(retr,0);cur=null;unlocked={};pending=null;pendingThen=null;$('#login').classList.add('on');$('#pinbox').classList.remove('on');renderProfiles()}
+const GAB=Object.assign(document.createElement('button'),{type:'button',id:'gAll',className:'chip gall'}),VTB=Object.assign(document.createElement('button'),{type:'button',id:'vTog',className:'chip gall'});
 const ICO_PIN=`<svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d='M12 21s-7-6.2-7-11a7 7 0 0 1 14 0c0 4.8-7 11-7 11z'/><circle cx='12' cy='10' r='2.5'/></svg>`,ICO_FOLD=`<svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d='M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z'/></svg>`,ICO_MON=`<svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x='3' y='4' width='18' height='12' rx='2'/><path d='M8 20h8M12 16v4'/></svg>`;
 function renderProfiles(){
   $('#plist').innerHTML=S.profiles.map(p=>{const n=S.items.filter(i=>i.profile===p.id).length;
@@ -996,6 +997,7 @@ function menus(){const p=P();
   $('#chips').innerHTML=`<span class="chip allc ${allOn?'on':''}" data-s="" title="${L('Alles tonen · groepen · locaties · computers','Show all · groups · locations · computers')}"><span class="ci"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d='M12 21s-7-6.2-7-11a7 7 0 0 1 14 0c0 4.8-7 11-7 11z'/><circle cx='12' cy='10' r='2.5'/></svg></span><b>${st.g}</b><span class="ci"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d='M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z'/></svg></span><b>${st.x}</b><span class="ci" title="${esc(st.byType)}"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x='3' y='4' width='18' height='12' rx='2'/><path d='M8 20h8M12 16v4'/></svg></span><b>${st.c}</b></span>`
    +`<span class="chip tagdd ${favOnly||statusF?'on':''}" id="statDD"><span class="ci"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d='M3 12h4l3-7 4 14 3-7h4'/></svg></span>${stLab} ▾</span>`
    +(tags.length?`<span class="chip tagdd ${tq?'on':''}" id="tagDD"><span class="ci"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d='M3 12V4h8l10 10-8 8z'/><circle cx='7.5' cy='7.5' r='1.5'/></svg></span>${tq?'#'+esc(tq):L('Tags','Tags')} ▾</span>`:'');
+  $('#chips').append(GAB,VTB);
   $('#statMenu').innerHTML=chips.slice(1).map(([k,l,n])=>{const on=k==='fav'?favOnly:(!favOnly&&statusF===k);return `<button type="button" class="${on?'on':''}" data-st="${k}">${k&&k!=='fav'?`<i class="dot" style="background:${SC[k]}"></i>`:''}${l}<b>${n}</b></button>`}).join('')+(favOnly||statusF?`<button type="button" class="clr" data-st="-">✕ ${L('Alle statussen','All statuses')}</button>`:'');
   const cnt={};m.forEach(i=>(i.tags||[]).forEach(t=>cnt[t]=(cnt[t]||0)+1));
   requestAnimationFrame(chipNav);
@@ -1011,14 +1013,14 @@ function filtered(){const q=$('#q').value.trim().toLowerCase().split(/\s+/).filt
 function render(){if(!cur)return;try{qMark();fMark()}catch(e){}const p=P();if(!p)return showLogin();ensureGroups();menus();renderFoot();
   shown=filtered();renderSel();sel=Math.min(sel,Math.max(0,shown.length-1));
   $('#main').className=S.view==='list'?'list':'';$('#fSort').value=S.sort;
-  {const vt=$('#vTog');vt.textContent=S.view==='list'?L('▦ Tegels','▦ Tiles'):L('☰ Lijst','☰ List');vt.title=S.view==='list'?L('Toon als tegels','Show as tiles'):L('Toon als lijst','Show as list')}
+  {const vt=VTB;vt.textContent=S.view==='list'?L('▦ Tegels','▦ Tiles'):L('☰ Lijst','☰ List');vt.title=S.view==='list'?L('Toon als tegels','Show as tiles'):L('Toon als lijst','Show as list')}
   const tot=mine().length;$('#count').textContent=`${shown.length} van ${tot} X-Cube${tot===1?'':'s'} · ${p.email}`;
   if(!shown.length){$('#grid').innerHTML=tot?`<div class="empty">Geen X-Cube gevonden met deze zoekopdracht of filters.</div>`
     :`<div class="empty"><b>Nog geen X-Cube's in ${esc(p.name)}.</b><br>Haal ze op uit Google of voeg er zelf een toe.<br><button class="primary" onclick="openImport()">⇩ Importeren uit Google</button><button onclick="openEdit()">+ Handmatig toevoegen</button></div>`;return}
   shown=orderGrouped(shown);sel=Math.min(sel,Math.max(0,shown.length-1));
   $('#grid').innerHTML=gridHTML(p);renderGAll()}
 function grpKeys(){return [...new Set(shown.map(i=>gkey(i.group)).filter(Boolean))]}
-function renderGAll(){const ks=grpKeys(),b=$('#gAll');if(!b)return;S.collapsed=S.collapsed||{};b.style.display=ks.length>1?'':'none';
+function renderGAll(){const ks=grpKeys(),b=GAB;if(!b)return;S.collapsed=S.collapsed||{};b.style.display=ks.length>1?'':'none';
   const all=ks.length&&ks.every(k=>S.collapsed[cur+'|'+k]);b.textContent=all?L('▾ Alle groepen openen','▾ Expand all groups'):L('▸ Alle groepen sluiten','▸ Collapse all groups');b.dataset.all=all?'1':''}
 function stLabel(s){return ({actief:L('Actief','Active'),onderhoud:L('Onderhoud','Maintenance'),uit:L('Uit gebruik','Out of use')})[s]||L('Actief','Active')}
 function cardHTML(i,n,p){return `<div class="card ${n===sel&&!selMode?'sel':''} ${picked.has(i.id)?'picked':''}" draggable="${selMode?'false':'true'}" data-id="${i.id}" style="--c:${gColor(i.group)}">
@@ -1116,7 +1118,7 @@ $('#grid').addEventListener('click',e=>{const c=e.target.closest('.card');if(!c)
   else if(!ae&&!e.target.closest('a,.uni')){sel=shown.indexOf(it);render()}});
 $('#grid').addEventListener('dblclick',e=>{const c=e.target.closest('.card');if(c&&!e.target.closest('[data-act]'))openEdit(S.items.find(x=>x.id===c.dataset.id))});
 $('#chips').addEventListener('click',e=>{const dd=e.target.closest('#tagDD,#statDD');if(dd){e.stopPropagation();const par=$('#chipWrap').parentElement;if(getComputedStyle(par).position==='static')par.style.position='relative';const tm=$(dd.id==='tagDD'?'#tagMenu':'#statMenu');$$('.tagmenu.open').forEach(x=>x!==tm&&x.classList.remove('open'));const r=dd.getBoundingClientRect(),pr=$('#chipWrap').parentElement.getBoundingClientRect();tm.style.left=(r.left-pr.left)+'px';tm.style.top=(r.bottom-pr.top+6)+'px';tm.classList.toggle('open');return}
-  const c=e.target.closest('.chip');if(!c||c.classList.contains("ginfo"))return;
+  const c=e.target.closest('.chip');if(!c||c.classList.contains("ginfo")||c.classList.contains("gall"))return;
   if(c.dataset.tag!==undefined)$('#q').value='#'+c.dataset.tag;else if(c.dataset.s===''){favOnly=false;statusF='';$('#fLand').value='';$('#fLoc').value='';$('#fGroup').value='';if(/^#/.test($('#q').value))$('#q').value=''}sel=0;render()});
 $('#statMenu').addEventListener('click',e=>{const b=e.target.closest('[data-st]');if(!b)return;const k=b.dataset.st;if(k==='-'){favOnly=false;statusF=''}else if(k==='fav'){favOnly=!favOnly;statusF=''}else{favOnly=false;statusF=statusF===k?'':k}$('#statMenu').classList.remove('open');sel=0;render()});
 ['#q','#fGroup','#fLoc','#fLand'].forEach(s=>$(s).addEventListener('input',()=>{sel=0;render()}));
@@ -1133,7 +1135,7 @@ $('#tagMenu').addEventListener('click',e=>{const b=e.target.closest('[data-tag]'
 document.addEventListener('click',e=>{if(!e.target.closest('#tagMenu,#tagDD,#statMenu,#statDD'))$$('.tagmenu.open').forEach(x=>x.classList.remove('open'))});
 $('#qClr').onclick=()=>{$('#q').value='';qMark();sel=0;render();$('#q').focus()};
 $('#fSort').onchange=()=>{S.sort=$('#fSort').value;saveQuiet();render()};
-$('#vTog').onclick=()=>{S.view=S.view==='list'?'grid':'list';saveQuiet();render()};
+VTB.onclick=()=>{S.view=S.view==='list'?'grid':'list';saveQuiet();render()};
 $('#btnAdd').onclick=()=>openEdit();$$('.readbar').forEach(bar=>{const bd=bar.dataset.body;bar.querySelector('[data-r="play"]').onclick=()=>readHelp(bd);bar.querySelector('[data-r="prev"]').onclick=()=>readChap(-1,bd);bar.querySelector('[data-r="next"]').onclick=()=>readChap(1,bd)});$('#dlgSync').addEventListener('close',readStop);$$('.rvoice button').forEach(b=>b.onclick=()=>{S.voiceG=b.dataset.g;saveQuiet();readUI();if(readOn)readFrom(Math.max(0,readN-1))});$('#fbText').addEventListener('input',fbUpd);$('#dlgHelp').addEventListener('close',readStop);try{speechSynthesis.getVoices();speechSynthesis.onvoiceschanged=()=>{}}catch(e){}$('#btnMic').onclick=voiceStart;$('#vAgain').onclick=()=>{voiceStart()};if(!(window.SpeechRecognition||window.webkitSpeechRecognition))$('#btnMic').style.display='none';
 $('#vRes').addEventListener('click',e=>{const a=e.target.closest('a[data-vdev]');if(a){markVoice(a);setTimeout(()=>$('#dlgVoice').close(),300)}});
 document.addEventListener('keydown',e=>{if(e.key==='m'&&e.altKey&&cur){e.preventDefault();voiceStart()}});if(window.XRDP_STANDALONE){const b=$('#mOut');b.style.display='';b.onclick=()=>ask(L('Uitloggen uit X-RDP? Je gegevens blijven veilig online bewaard.','Sign out of X-RDP? Your data stays safely stored online.'),()=>window.__fbSignOut&&window.__fbSignOut())}$('#apkSel').onchange=()=>{$('#apkCustom').style.display=$('#apkSel').value==='custom'?'':'none'};$('#mAdd').onclick=()=>{$('#hbtns').classList.remove('open');openEdit()};$('#mExp').onclick=()=>{$('#hbtns').classList.remove('open');$('#pExp').click()};
@@ -1786,7 +1788,7 @@ document.addEventListener('dragover',e=>{if(!cur)return;asY=e.clientY;asStart()}
 document.addEventListener('dragend',asStop,true);document.addEventListener('drop',asStop,true);
 document.addEventListener('dragleave',e=>{if(!e.relatedTarget&&(e.clientY<=0||e.clientY>=innerHeight))asY=e.clientY<=0?0:innerHeight},true);
 
-$('#gAll').onclick=()=>{const ks=grpKeys(),open=$('#gAll').dataset.all==='1';S.collapsed=S.collapsed||{};
+GAB.onclick=()=>{const ks=grpKeys(),open=GAB.dataset.all==='1';S.collapsed=S.collapsed||{};
   for(const k of ks){if(open)delete S.collapsed[cur+'|'+k];else S.collapsed[cur+'|'+k]=1}saveQuiet();render()};
 
 load();showLogin();setLang(S.lang||(/^en/i.test(navigator.language)?'en':'nl'));setSync('local');startSync();
