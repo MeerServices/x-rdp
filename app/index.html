@@ -658,7 +658,7 @@ header{position:relative}.mx{display:none;position:absolute;right:12px;top:100%;
 
 <script src="fbshim.js"></script>
 <script>
-const APPV='86';const KEY='xcube-rdp-v2',OLDKEY='xcube-rdp-v1',CRD='https://remotedesktop.google.com/access',BASE=CRD+'/session/';
+const APPV='87';const KEY='xcube-rdp-v2',OLDKEY='xcube-rdp-v1',CRD='https://remotedesktop.google.com/access',BASE=CRD+'/session/';
 const COLORS=[['#ff2d85','Roze'],['#8b6cff','Paars'],['#3ee0a1','Groen'],['#ffb547','Oranje'],['#38c8ff','Blauw'],['#ff5a6e','Rood'],['#2ee6d6','Turquoise']];
 const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
 const uid=()=>Math.random().toString(36).slice(2,10);
@@ -700,7 +700,7 @@ const BNAME=/Edg/i.test(UA)?'Microsoft Edge':/SamsungBrowser/i.test(UA)?'Samsung
 const GOPAGE='https://meerservices.github.io/x-rdp/go.html';
 function launch(url){const pk=IS_ANDROID&&P()&&P().apk;
   if(window.XRDP_STANDALONE&&/^https:/.test(url)){
-    if(pk){const u=new URL(url);return 'intent://'+u.host+u.pathname+u.search+'#Intent;scheme=https;package='+pk+';S.browser_fallback_url='+encodeURIComponent(url)+';end'}
+    if(pk){const u=new URL(url);const cmp=/^com\.(android\.chrome|chrome\.(beta|dev|canary))$/.test(pk)?'component='+pk+'/com.google.android.apps.chrome.Main;':'';return 'intent://'+u.host+u.pathname+u.search+'#Intent;scheme=https;action=android.intent.action.VIEW;category=android.intent.category.BROWSABLE;'+cmp+'package='+pk+';S.browser_fallback_url='+encodeURIComponent(url)+';end'}
     const p0=P();if(!IS_ANDROID&&!IS_IOS&&!TOUCH&&p0&&(p0.pcProf||p0.pcBr||p0.pcFull)){const o={u:url,p:p0.pcProf||'',b:p0.pcBr||'chrome'};if(p0.pcFull&&/remotedesktop\.google\.com/.test(url))o.f='1';return 'xrdp://open?'+new URLSearchParams(o).toString()}
     return url}
   if(pk&&/^https:/.test(url))return GOPAGE+'?pkg='+encodeURIComponent(pk)+'&u='+encodeURIComponent(url);
