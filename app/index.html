@@ -267,15 +267,17 @@ header{position:relative}.mx{display:none;position:absolute;right:12px;top:100%;
 .lgtop{display:flex;align-items:center;gap:12px;margin-bottom:6px}.lgtop .lgname{font:700 24px Outfit,sans-serif;letter-spacing:.5px;flex:1}.lgtop .seg{margin-left:auto}#acct{display:none!important}
 @media (max-width:760px){
   .list .grid,.list .grp .gbody{grid-template-columns:minmax(0,1fr)!important;gap:6px}
-  .list .card{display:flex!important;flex-direction:row!important;flex-wrap:nowrap;align-items:center;gap:8px;padding:8px 10px!important;min-height:0}
-  .list .card .chead{display:flex;flex:1;min-width:0;margin:0;gap:10px;align-items:center;position:static}
+  .list .card{display:flex!important;flex-direction:row!important;flex-wrap:wrap;justify-content:flex-end;row-gap:6px;align-items:center;gap:8px;padding:8px 10px!important;min-height:0}
+  .list .card .chead{display:flex;flex:1 1 170px;min-width:0;margin:0;gap:10px;align-items:center;position:static}
   .list .card .chead .info{flex:1;min-width:0}.list .card .icob{position:relative;left:auto;top:auto}.list .card .star{flex:none;padding:2px}
   .list .card .ico{width:36px;height:36px;flex:none}.list .card .ico img{max-width:28px;max-height:28px}
   .list .card .name{font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   .list .card .sub{font-size:11.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-  .list .card .tags,.list .card .note,.list .card .tbar,.list .card .actions,.list .card .lgt{display:none!important}
+  .list .card .tags,.list .card .note,.list .card .actions,.list .card .lgt,.list .card .tbar .gl{display:none!important}
+  .list .card .tbar{display:flex;flex:none;gap:6px;margin:0;order:3}.list .card .tbar .uni{width:40px;min-height:0!important;padding:5px 2px;flex:none}.list .card .tbar .uni span{display:none}.list .card .tbar .uni svg{width:22px;height:22px}
+  .list .card .devs{order:2}
   .list .card .devs{display:flex;flex-wrap:nowrap;gap:6px;margin:0;flex:none}
-  .list .dev{width:44px;min-height:0;padding:4px 2px}.list .dev .di{width:26px;height:26px}.list .dev span:not(.di){font-size:10px}.list .dev.add{display:none}
+  .list .dev{width:42px;min-height:0;padding:4px 2px}.list .dev .di{width:26px;height:26px}.list .dev span:not(.di){font-size:10px}.list .dev.add{display:none}
 }
 @media (max-width:760px){.acctb{font-size:11px}.acctm{position:fixed;left:12px;right:12px;top:64px;min-width:0}}
 @media (min-width:761px){
@@ -656,7 +658,7 @@ header{position:relative}.mx{display:none;position:absolute;right:12px;top:100%;
 
 <script src="fbshim.js"></script>
 <script>
-const APPV='85';const KEY='xcube-rdp-v2',OLDKEY='xcube-rdp-v1',CRD='https://remotedesktop.google.com/access',BASE=CRD+'/session/';
+const APPV='86';const KEY='xcube-rdp-v2',OLDKEY='xcube-rdp-v1',CRD='https://remotedesktop.google.com/access',BASE=CRD+'/session/';
 const COLORS=[['#ff2d85','Roze'],['#8b6cff','Paars'],['#3ee0a1','Groen'],['#ffb547','Oranje'],['#38c8ff','Blauw'],['#ff5a6e','Rood'],['#2ee6d6','Turquoise']];
 const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
 const uid=()=>Math.random().toString(36).slice(2,10);
