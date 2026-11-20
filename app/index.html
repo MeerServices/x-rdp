@@ -679,7 +679,7 @@ header{position:relative}.mx{display:none;position:absolute;right:12px;top:100%;
 <script src="fbshim.js"></script>
 <script>if("serviceWorker" in navigator)navigator.serviceWorker.register("sw.js").catch(()=>{})</script>
 <script>
-const APPV='94';const KEY='xcube-rdp-v2',OLDKEY='xcube-rdp-v1',CRD='https://remotedesktop.google.com/access',BASE=CRD+'/session/';
+const APPV='95';const KEY='xcube-rdp-v2',OLDKEY='xcube-rdp-v1',CRD='https://remotedesktop.google.com/access',BASE=CRD+'/session/';
 const COLORS=[['#ff2d85','Roze'],['#8b6cff','Paars'],['#3ee0a1','Groen'],['#ffb547','Oranje'],['#38c8ff','Blauw'],['#ff5a6e','Rood'],['#2ee6d6','Turquoise']];
 const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
 const uid=()=>Math.random().toString(36).slice(2,10);
@@ -1141,7 +1141,7 @@ function fMark(){['#fGroup','#fLoc','#fLand'].forEach(k=>{const e=$(k);if(e){e.c
 $('#btnMenu').onclick=e=>{e.stopPropagation();$('#hbtns').classList.toggle('open')};
 document.addEventListener('click',e=>{if(!e.target.closest('#hbtns,#btnMenu'))$('#hbtns').classList.remove('open')});
 $('#hbtns').addEventListener('click',e=>{if(e.target.closest('a,button:not(.seg button)'))setTimeout(()=>$('#hbtns').classList.remove('open'),50)});
-$('#sync').onclick=openSync;
+$('#sync').onclick=()=>openSync();
 $('#syncNow').onclick=()=>{if(!SY.ref){toast(L('Synchronisatie is niet actief','Sync is not active'));return}SY.lastSent=null;S.ts=Math.max(Date.now(),(S.ts||0)+1);S.pending=S.ts;push();toast(L('Bezig met synchroniseren…','Syncing…'));setTimeout(()=>{if($('#dlgSync').open)openSync(true)},1800)};
 
 /* ---------- selecteren & verwijderen ---------- */
