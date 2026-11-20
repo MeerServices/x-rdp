@@ -272,7 +272,10 @@ header{position:sticky}.mx{display:none;position:absolute;right:12px;top:100%;ma
 .card .sub .tag{background:none;border:none;padding:0;margin:0;color:inherit;font:inherit}
 .tagmenu{display:none;position:absolute;z-index:35;max-width:min(420px,92vw);max-height:60vh;overflow:auto;flex-wrap:wrap;gap:6px;padding:10px;background:var(--panel);border:1px solid var(--line);border-radius:14px;box-shadow:0 16px 40px rgba(5,0,30,.6)}.tagmenu.open{display:flex}
 .tagmenu button{min-height:0!important;padding:5px 10px;border-radius:999px;border:1px solid var(--line);background:rgba(255,255,255,.05);color:var(--text);font-size:13px;cursor:pointer;display:inline-flex;gap:6px;align-items:center}.tagmenu button b{opacity:.6;font-weight:600}.tagmenu button:hover,.tagmenu button.on{border-color:var(--accent);background:rgba(255,45,133,.18)}.tagmenu .clr{flex-basis:100%;justify-content:center}
-.pcard .pn{display:flex;align-items:center;flex-wrap:wrap;gap:4px 12px}.pst{display:inline-flex;font-size:13px;font-weight:500;color:var(--muted)}.pst .gcn:last-child{margin-right:0}.gcn{display:inline-flex;align-items:center;gap:3px;margin-right:9px;vertical-align:middle}.gcn .ci{display:inline-flex;opacity:.9}.gcn .ci svg{display:block}.gcn b{font-weight:600;color:var(--text)}
+.pcard .pn{display:flex;align-items:center;flex-wrap:wrap;gap:4px 12px}.pst{display:inline-flex;font-size:13px;font-weight:500;color:var(--muted)}.pst .gcn:last-child{margin-right:0}.wrow{display:flex;gap:6px;align-items:stretch}.wrow input{flex:1;min-width:0}.wbtn{flex:none;padding:6px 10px!important;font-size:13px;white-space:nowrap}
+.wfind{display:none;flex-direction:column;gap:5px;margin-top:-4px;font-size:13px}.wfind.on{display:flex}.wfind .wst{color:var(--muted)}.wfind .wst.ok{color:var(--ok)}.wfind .wst.bad{color:var(--warn)}
+.wfind .wsug{display:flex;gap:8px;align-items:center;text-align:left;justify-content:flex-start;padding:6px 10px!important;min-height:0!important;font-size:13px;width:100%;white-space:normal}.wfind .wsug img{width:16px;height:16px;flex:none;border-radius:3px}.wfind .wsug small{color:var(--muted);display:block;word-break:break-all}.wfind .wsug.on{border-color:var(--accent)}.wfind .wl{display:flex;gap:12px;flex-wrap:wrap}
+.gcn{display:inline-flex;align-items:center;gap:3px;margin-right:9px;vertical-align:middle}.gcn .ci{display:inline-flex;opacity:.9}.gcn .ci svg{display:block}.gcn b{font-weight:600;color:var(--text)}
 .chip .ci{display:inline-flex;opacity:.9;margin-right:2px}.chip .ci svg{display:block}.allc b{margin:0 8px 0 3px}.allc b:last-child{margin-right:0}.tagmenu .dot{margin-right:2px}
 .hlang{flex:none}.hlang button{padding:5px 9px!important;min-height:0!important;font-size:12px}
 .chip.ginfo{cursor:default;opacity:.9}.chip.ginfo:hover{border-color:var(--line)}
@@ -647,8 +650,10 @@ header{position:sticky}.mx{display:none;position:absolute;right:12px;top:100%;ma
     <div class="row2"><label>Plaats<input name="gloc" list="dlLocs" placeholder="bijv. Rotterdam"></label>
       <label>Land<input name="gland" list="dlLands" placeholder="bijv. Nederland"></label></div>
     <label>Adres<input name="gaddr" placeholder="Straat 1, 1234 AB Plaats"></label>
+    <div class="wfind" id="gAddrOut"></div>
     <a id="gMapTest" class="hint" target="_blank" rel="noopener" style="display:none">📍 Bekijk in Google Maps ↗</a>
-    <label>Website<input name="gweb" class="mono" placeholder="https://…"></label>
+    <label>Website<span class="wrow"><input name="gweb" class="mono" placeholder="https://…"><button type="button" class="ghost wbtn" id="gWebFind" title="Website zoeken, testen en adres voorstellen">🔍 Zoeken</button><button type="button" class="ghost wbtn" id="gWebTest" title="Website testen en adres zoeken">✓ Test</button></span></label>
+    <div class="wfind" id="gWebOut"></div>
     <label>Advertising-link<input name="gadv" class="mono" placeholder="https://xcube.nl/info/rotterdam"></label>
     <div><span class="sub2" style="font-size:12px">Groepsicoon</span>
       <div class="logoBox"><div class="logoPrev icoPrev" id="gicoPrev">📁</div><span class="hint" id="gicoHint" style="margin:0">Standaard het mapje. Kies hieronder een logo uit de mand.</span></div>
@@ -682,7 +687,7 @@ header{position:sticky}.mx{display:none;position:absolute;right:12px;top:100%;ma
 <script src="fbshim.js"></script>
 <script>if("serviceWorker" in navigator)navigator.serviceWorker.register("sw.js").catch(()=>{})</script>
 <script>
-const APPV='99';const KEY='xcube-rdp-v2',OLDKEY='xcube-rdp-v1',CRD='https://remotedesktop.google.com/access',BASE=CRD+'/session/';
+const APPV='100';const KEY='xcube-rdp-v2',OLDKEY='xcube-rdp-v1',CRD='https://remotedesktop.google.com/access',BASE=CRD+'/session/';
 const COLORS=[['#ff2d85','Roze'],['#8b6cff','Paars'],['#3ee0a1','Groen'],['#ffb547','Oranje'],['#38c8ff','Blauw'],['#ff5a6e','Rood'],['#2ee6d6','Turquoise']];
 const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
 const uid=()=>Math.random().toString(36).slice(2,10);
@@ -1405,7 +1410,7 @@ const EN={
 "Kies je profiel":"Choose your profile","Profiel kiezen":"Choose profile","Elk profiel hoort bij een Google-account. De X-Cube's van dat profiel openen in Chrome Remote Desktop met het juiste account.":"Each profile belongs to a Google account. That profile's X-Cubes open in Chrome Remote Desktop with the right account.",
 "Profiel toevoegen":"Add profile","Profiel bewerken":"Edit profile","Profiel verwijderen":"Delete profile","Inloggen":"Log in","Terug":"Back","Onjuiste pincode":"Wrong PIN","Pincode":"PIN",
 "Naam *":"Name *","Google-account (Gmail) *":"Google account (Gmail) *","Het account waaronder deze X-Cube's in Chrome Remote Desktop staan.":"The account these X-Cubes are listed under in Chrome Remote Desktop.",
-"Pincode (optioneel)":"PIN (optional)","leeg = geen pincode":"empty = no PIN","Alleen een drempel op dit apparaat, geen echte beveiliging. Het echte slot is je Google-login.":"Only a barrier on this device, not real security. The real lock is your Google login.","Kleur":"Colour","Adres":"Address","bijv. Rotterdam":"e.g. Rotterdam","📍 Bekijk in Google Maps ↗":"📍 View in Google Maps ↗","Alle plaatsen":"All places","Straat 1, 1234 AB Plaats":"Street 1, 1234 AB City","📁 Groep bewerken":"📁 Edit group","Naam van de groep":"Group name","Website":"Website","⊘ Groep opheffen":"⊘ Ungroup","Groep opgeslagen":"Group saved","Website locatie":"Location website","Advertising-link":"Advertising link","Uitleg":"Help","? Uitleg":"? Help","OK":"OK","⇧ Profielen exporteren":"⇧ Export profiles","⇩ Profielen importeren":"⇩ Import profiles","Pincodes meenemen":"Include PINs","💾 Bestand downloaden":"💾 Download file","📂 Bestand kiezen":"📂 Choose file",
+"Pincode (optioneel)":"PIN (optional)","🔍 Zoeken":"🔍 Search","✓ Test":"✓ Test","Website zoeken, testen en adres voorstellen":"Search the website, test it and suggest an address","Website testen en adres zoeken":"Test the website and look for an address","leeg = geen pincode":"empty = no PIN","Alleen een drempel op dit apparaat, geen echte beveiliging. Het echte slot is je Google-login.":"Only a barrier on this device, not real security. The real lock is your Google login.","Kleur":"Colour","Adres":"Address","bijv. Rotterdam":"e.g. Rotterdam","📍 Bekijk in Google Maps ↗":"📍 View in Google Maps ↗","Alle plaatsen":"All places","Straat 1, 1234 AB Plaats":"Street 1, 1234 AB City","📁 Groep bewerken":"📁 Edit group","Naam van de groep":"Group name","Website":"Website","⊘ Groep opheffen":"⊘ Ungroup","Groep opgeslagen":"Group saved","Website locatie":"Location website","Advertising-link":"Advertising link","Uitleg":"Help","? Uitleg":"? Help","OK":"OK","⇧ Profielen exporteren":"⇧ Export profiles","⇩ Profielen importeren":"⇩ Import profiles","Pincodes meenemen":"Include PINs","💾 Bestand downloaden":"💾 Download file","📂 Bestand kiezen":"📂 Choose file",
 "Sleep hier een exportbestand (.json)":"Drop an export file (.json) here","Of plak de tekst van een export":"Or paste the text of an export","Bestand opgeslagen":"File saved",
 "Kies welke profielen je wilt exporteren. Alles gaat mee: logo, icoon, apparaattypen met iconen, benaming, ISL-link, kleur en alle locaties met apparaten, links en UniFi.":"Choose which profiles to export. Everything is included: logo, icon, device types with icons, naming, ISL link, colour and all locations with devices, links and UniFi.",
 "Let op: met pincodes kan iedereen die dit bestand heeft je apparaten openen. Bewaar het veilig en stuur het niet zomaar door.":"Note: with PINs, anyone who has this file can open your devices. Keep it safe and don't share it casually.","Knop":"Show the","bovenaan tonen":"button at the top","ISL-link":"ISL link","De knop ISL bovenaan opent deze link. Alleen zichtbaar bij dit profiel als het vinkje aan staat.":"The ISL button at the top opens this link. Only visible for this profile when ticked.","🔗 Link plakken":"🔗 Paste link","Link plakken":"Paste link","Plak hier een link van Chrome Remote Desktop of UniFi":"Paste a Chrome Remote Desktop or UniFi link here",
@@ -1766,7 +1771,7 @@ $('#btnHelp').onclick=openHelp;$('#btnHelp2').onclick=openHelp;
 
 let editGrp=null;
 function openGrp(g){const p=P(),m=gmeta(p,g),members=mine().filter(i=>gkey(i.group)===gkey(g));editGrp=g;const f=$('#fGrp');
-  gIco=m.icon||'';gIcoShow();f.gname.value=g;f.gloc.value=m.loc||'';f.gland.value=m.land||'';f.gaddr.value=m.addr||'';f.gweb.value=m.web||'';f.gadv.value=m.adv||'';gMapUpd();$('#grpInfo').textContent=members.map(i=>i.name).join(' · ');
+  gIco=m.icon||'';gIcoShow();f.gname.value=g;f.gloc.value=m.loc||'';f.gland.value=m.land||'';f.gaddr.value=m.addr||'';f.gweb.value=m.web||'';f.gadv.value=m.adv||'';gMapUpd();WF.seq++;wfBox('#gWebOut','');wfBox('#gAddrOut','');$('#grpInfo').textContent=members.map(i=>i.name).join(' · ');
   $('#grpSplit').style.display=members.length>1?'':'none';$('#dlgGrp').showModal();setTimeout(()=>f.gname.select(),30)}
 $('#gicoDef').onclick=()=>{gIco='';gIcoShow()};
 $('#fGrp').addEventListener('submit',e=>{e.preventDefault();const f=e.target,p=P(),old=editGrp,nn=f.gname.value.trim();if(!nn)return;
@@ -1776,6 +1781,60 @@ $('#fGrp').addEventListener('submit',e=>{e.preventDefault();const f=e.target,p=P
   save();$('#dlgGrp').close();render();toast(L('Groep opgeslagen','Group saved'))});
 function gMapUpd(){const F=$('#fGrp'),a=[F.gaddr.value.trim()||F.gloc.value.trim(),F.gland.value.trim()].filter(x=>x).join(', '),l=$('#gMapTest');l.style.display=a?'':'none';if(a)l.href=launch(mapsUrl(a))}
 ['gaddr','gloc','gland'].forEach(n=>$('#fGrp')[n].addEventListener('input',gMapUpd));
+/* ---------- website zoeken, testen en adres voorstellen ---------- */
+const WF={seq:0};
+const jina=u=>fetch('https://r.jina.ai/'+u,{headers:{'Accept':'text/plain'}}).then(r=>{if(!r.ok)throw new Error('HTTP '+r.status);return r.text()});
+const tmo=(p,ms)=>Promise.race([p,new Promise((_,j)=>setTimeout(()=>j(new Error('timeout')),ms))]);
+function wfQuery(){const F=$('#fGrp');return [F.gname.value.trim(),F.gloc.value.trim(),F.gland.value.trim()].filter((x,i,a)=>x&&a.findIndex(y=>y.toLowerCase()===x.toLowerCase())===i).join(' ')}
+function wfHost(u){try{return new URL(u).hostname.replace(/^www\./,'')}catch(e){return u}}
+const WF_SKIP=/(^|\.)(google\.|youtube\.|facebook\.|instagram\.|linkedin\.|twitter\.|x\.com$|wikipedia\.|tripadvisor\.|duckduckgo\.|bing\.|yelp\.|booking\.|openstreetmap\.)/i;
+async function wfSearch(q){const out=[];
+  const ddg=tmo(jina('https://html.duckduckgo.com/html/?q='+encodeURIComponent(q)),15000).then(t=>{const seen=new Set();
+    for(const m of t.matchAll(/\[([^\]]{2,140})\]\((https?:\/\/[^)\s]+)\)/g)){let u=m[2];const ud=u.match(/[?&]uddg=([^&]+)/);if(ud)u=decodeURIComponent(ud[1]);
+      if(/duckduckgo\.com/.test(u))continue;let h;try{h=new URL(u)}catch(e){continue}if(WF_SKIP.test(h.hostname))continue;const k=h.hostname.replace(/^www\./,'');if(seen.has(k))continue;seen.add(k);
+      out.push({u:h.origin+'/',t:m[1].replace(/[*_#]/g,'').trim(),src:'web'});if(seen.size>=5)break}}).catch(()=>{});
+  const osm=tmo(fetch('https://nominatim.openstreetmap.org/search?format=jsonv2&limit=3&extratags=1&addressdetails=1&accept-language='+(LANG==='en'?'en':'nl')+'&q='+encodeURIComponent(q)).then(r=>r.json()),12000).then(js=>{(js||[]).forEach(o=>{const x=o.extratags||{},w=x.website||x['contact:website']||x.url;
+      if(w){let u=/^https?:/.test(w)?w:'https://'+w;try{u=new URL(u).origin+'/'}catch(e){}out.push({u,t:o.display_name,src:'osm'})}if(o.address)WF.osm=(WF.osm||[]).concat([osmAddr(o.address)].filter(Boolean))})}).catch(()=>{});
+  await Promise.all([ddg,osm]);out.sort((a,b)=>(a.src==='osm')-(b.src==='osm'));const seen=new Set();return out.filter(o=>{const k=wfHost(o.u);if(seen.has(k))return false;seen.add(k);return true}).slice(0,6)}
+function osmAddr(a){const st=[a.road,a.house_number].filter(Boolean).join(' '),city=a.city||a.town||a.village||a.municipality||'';if(!st||!city)return '';return {addr:[st,[a.postcode,city].filter(Boolean).join(' ')].join(', '),city,land:a.country||''}}
+async function wfTest(u){try{await tmo(fetch(u,{mode:'no-cors',cache:'no-store'}),9000);return true}catch(e){return false}}
+function wfAddrs(t){const res=[],add=(a,c)=>{a=a.replace(/\s+/g,' ').replace(/^[\s,:;|*•-]+|[\s,:;|*•-]+$/g,'').trim();if(a.length<8||a.length>110||/postbus|p\.?\s?o\.?\s?box|postfach|boîte postale/i.test(a))return;if(!res.some(x=>x.addr.toLowerCase()===a.toLowerCase()))res.push({addr:a,city:(c||'').trim()})};
+  t=t.replace(/\[([^\]]*)\]\([^)]*\)/g,'$1').replace(/[*_`#>]/g,' ').replace(/\\n|\r/g,'\n');
+  const STR="[A-ZÀ-Ý][A-Za-zÀ-ÿ'.\\-]+(?:[ \\-][A-Za-zÀ-ÿ'.\\-]+){0,4}";
+  const re1=new RegExp('('+STR+'\\s\\d{1,5}[a-zA-Z]?(?:[-/ ]\\d{1,4}[a-zA-Z]?)?)\\s*[,\\n|]?\\s*((?:[A-Z]{1,2}-?\\s?)?\\d{4}\\s?[A-Z]{2}|(?:[A-Z]{1,2}-?\\s?)?\\d{4,5})\\s+([A-ZÀ-Ý][A-Za-zÀ-ÿ\\-]+(?:[ \\-][A-ZÀ-Ý(][A-Za-zÀ-ÿ\\-)]+){0,2})','g');
+  for(const m of t.matchAll(re1))add(`${m[1]}, ${m[2]} ${m[3]}`,m[3]);
+  const re2=/(\d{1,6}\s+[A-Z][\w .'-]{2,40}?\b(?:St|Street|Ave|Avenue|Rd|Road|Blvd|Boulevard|Dr|Drive|Ln|Lane|Way|Hwy|Highway|Pkwy|Parkway|Ct|Court|Pl|Place)\.?(?:,?\s*(?:Suite|Ste|Unit|#)\s*[\w-]+)?),?\s+([A-Z][A-Za-z .]+),\s*([A-Z]{2})\s+(\d{5}(?:-\d{4})?)/g;
+  for(const m of t.matchAll(re2))add(`${m[1]}, ${m[2]}, ${m[3]} ${m[4]}`,m[2]);
+  return res.slice(0,6)}
+async function wfScan(u){const host=wfHost(u);let txt='';try{txt=await tmo(jina(u),20000)}catch(e){return null}
+  let all=wfAddrs(txt);if(all.length<2){const links=[...txt.matchAll(/\]\((https?:\/\/[^)\s]+)\)/g)].map(m=>m[1]).filter(l=>wfHost(l)===host&&/contact|over-ons|about|locatie|location|route|adres|address|impressum|vestiging/i.test(l));
+    for(const l of [...new Set(links)].slice(0,2)){try{all=all.concat(wfAddrs(await tmo(jina(l),20000)))}catch(e){}}}
+  const seen=new Set();return all.filter(a=>{const k=a.addr.toLowerCase();if(seen.has(k))return false;seen.add(k);return true}).slice(0,6)}
+function wfBox(id,html){const b=$(id);b.innerHTML=html;b.classList.toggle('on',!!html)}
+function wfAddrShow(list,host){const F=$('#fGrp');
+  if(!list||!list.length){wfBox('#gAddrOut',`<span class="wst bad">${L('Geen adres gevonden op','No address found on')} ${esc(host||L('de website','the website'))}.</span>`);return}
+  wfBox('#gAddrOut',`<span class="wst">${L('Adresvoorstel — tik om in te vullen:','Address suggestion — tap to fill in:')}</span>`+list.map((a,i)=>`<button type="button" class="ghost wsug" data-wa="${i}"><span>📍</span><span>${esc(a.addr)}</span></button>`).join(''));
+  $$('#gAddrOut [data-wa]').forEach(b=>b.onclick=()=>{const a=list[+b.dataset.wa];F.gaddr.value=a.addr;if(!F.gloc.value.trim()&&a.city)F.gloc.value=a.city;if(!F.gland.value.trim()&&a.land)F.gland.value=a.land;gMapUpd();$$('#gAddrOut .wsug').forEach(x=>x.classList.toggle('on',x===b));toast(L('Adres ingevuld','Address filled in'))})}
+async function wfCheck(u,seq){const F=$('#fGrp'),host=wfHost(u);
+  wfBox('#gAddrOut',`<span class="wst">⏳ ${L('Website testen…','Testing website…')}</span>`);
+  const ok=await wfTest(u);if(seq!==WF.seq)return;
+  const st=$('#gWebOut .wtest');if(st){st.className='wst wtest '+(ok?'ok':'bad');st.innerHTML=ok?`✓ ${esc(host)} ${L('is bereikbaar','is reachable')} · <a href="${esc(launch(u))}" target="_blank" rel="noopener">${L('openen','open')} ↗</a>`:`⚠ ${esc(host)} ${L('reageert niet','does not respond')} · <a href="${esc(launch(u))}" target="_blank" rel="noopener">${L('toch openen','open anyway')} ↗</a>`}
+  wfBox('#gAddrOut',`<span class="wst">⏳ ${L('Website doorzoeken naar een adres…','Searching the website for an address…')}</span>`);
+  let list=await wfScan(u);if(seq!==WF.seq)return;list=(list||[]).concat(WF.osm||[]);const seen=new Set();list=list.filter(a=>{const k=a.addr.toLowerCase();if(seen.has(k))return false;seen.add(k);return true});
+  wfAddrShow(list,host)}
+function wfStatus(){return `<span class="wst wtest">⏳ ${L('Testen…','Testing…')}</span>`}
+$('#gWebTest').onclick=()=>{const F=$('#fGrp');let u=F.gweb.value.trim();if(!u){toast(L('Vul eerst een website in of tik op Zoeken','Enter a website first or tap Search'));return}if(!/^https?:\/\//i.test(u))u=F.gweb.value='https://'+u;
+  const seq=++WF.seq;WF.osm=[];wfBox('#gWebOut',wfStatus());wfCheck(u,seq)};
+$('#gWebFind').onclick=async()=>{const F=$('#fGrp'),q=wfQuery();if(!q){toast(L('Vul eerst een naam of plaats in','Enter a name or place first'));return}
+  const seq=++WF.seq;WF.osm=[];const gl=`<a href="${esc(launch('https://www.google.com/search?q='+encodeURIComponent(q)))}" target="_blank" rel="noopener">${L('Zelf zoeken bij Google','Search Google yourself')} ↗</a>`;
+  wfBox('#gWebOut',`<span class="wst">⏳ ${L('Zoeken naar','Searching for')} "${esc(q)}"…</span>`);wfBox('#gAddrOut','');
+  const res=await wfSearch(q);if(seq!==WF.seq)return;
+  if(!res.length){wfBox('#gWebOut',`<span class="wst bad">${L('Geen website gevonden. Plak de link zelf en tik op Test.','No website found. Paste the link yourself and tap Test.')}</span><span class="wl">${gl}</span>`);if((WF.osm||[]).length)wfAddrShow(WF.osm,'OpenStreetMap');return}
+  const pick=u=>{F.gweb.value=u;$$('#gWebOut .wsug').forEach(x=>x.classList.toggle('on',x.dataset.wu===u));const s=$('#gWebOut .wtest');if(s)s.outerHTML=wfStatus();else $('#gWebOut').insertAdjacentHTML('afterbegin',wfStatus());const sq=++WF.seq;wfCheck(u,sq)};
+  wfBox('#gWebOut',`<span class="wst">${L('Gevonden websites — tik om een andere te kiezen:','Websites found — tap to pick another:')}</span>`+res.map(o=>`<button type="button" class="ghost wsug" data-wu="${esc(o.u)}"><img src="https://www.google.com/s2/favicons?sz=32&domain=${encodeURIComponent(wfHost(o.u))}" alt=""><span><b>${esc(wfHost(o.u))}</b><small>${esc(o.t)}</small></span></button>`).join('')+`<span class="wl">${gl}</span>`);
+  $$('#gWebOut [data-wu]').forEach(b=>b.onclick=()=>pick(b.dataset.wu));
+  const ok=await Promise.all(res.map(o=>wfTest(o.u)));if(seq!==WF.seq)return;const i=ok.indexOf(true);pick(res[i<0?0:i].u)};
+
 $('#grpSplit').onclick=()=>{const g=editGrp,members=mine().filter(i=>gkey(i.group)===gkey(g));
   ask(L(`Groep "${g}" opheffen? Elke ${term().one} krijgt weer een eigen groep.`,`Ungroup "${g}"? Each ${term().one} gets its own group again.`),()=>{members.forEach(i=>i.group=i.name);save();$('#dlgGrp').close();render()})};
 
