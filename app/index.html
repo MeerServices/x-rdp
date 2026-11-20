@@ -687,7 +687,7 @@ header{position:sticky}.mx{display:none;position:absolute;right:12px;top:100%;ma
 <script src="fbshim.js"></script>
 <script>if("serviceWorker" in navigator)navigator.serviceWorker.register("sw.js").catch(()=>{})</script>
 <script>
-const APPV='102';const KEY='xcube-rdp-v2',OLDKEY='xcube-rdp-v1',CRD='https://remotedesktop.google.com/access',BASE=CRD+'/session/';
+const APPV='103';const KEY='xcube-rdp-v2',OLDKEY='xcube-rdp-v1',CRD='https://remotedesktop.google.com/access',BASE=CRD+'/session/';
 const COLORS=[['#ff2d85','Roze'],['#8b6cff','Paars'],['#3ee0a1','Groen'],['#ffb547','Oranje'],['#38c8ff','Blauw'],['#ff5a6e','Rood'],['#2ee6d6','Turquoise']];
 const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
 const uid=()=>Math.random().toString(36).slice(2,10);
@@ -1040,6 +1040,7 @@ function gmeta(p,g){p.groups=p.groups||{};return p.groups[gkey(g)]||{}}
 function gLand(i){const p=S.profiles.find(x=>x.id===i.profile)||P();return (gmeta(p,i.group).land||'').trim()}
 function gLoc(i){const p=S.profiles.find(x=>x.id===i.profile)||P();return (gmeta(p,i.group).loc||'').trim()}
 const mapsUrl=a=>'https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(a);
+function mapsHref(a){const u=mapsUrl(a);if(IS_ANDROID&&window.XRDP_STANDALONE)return 'intent://www.google.com/maps/search/?api=1&query='+encodeURIComponent(a)+'#Intent;scheme=https;action=android.intent.action.VIEW;package=com.google.android.apps.maps;S.browser_fallback_url='+encodeURIComponent(u)+';end';return launch(u)}
 function ensureGroups(){let ch=false;const fix=u=>{u=(u||'').trim();return u&&!/^https?:\/\//i.test(u)?'https://'+u:u};
   for(const p of S.profiles){p.groups=p.groups&&typeof p.groups==='object'?p.groups:{};const its=S.items.filter(i=>i.profile===p.id);
     for(const i of its){if(!(i.group||'').trim()){i.group=(i.name||'').trim()||'—';ch=true}
@@ -1058,7 +1059,7 @@ function gridHTML(p){let h='',n=0;const done=new Set();S.collapsed=S.collapsed||
     const members=shown.filter(j=>(j.group||'').trim().toLowerCase()===k),col=!!S.collapsed[p.id+'|'+k];
     h+=`<section class="grp ${col?'col':''} ${actGrp===p.id+'|'+k?'act':''}" data-grp="${esc(g)}" style="--c:${gColor(g)}"><div class="gh"><button type="button" class="gtog" data-gact="tog" title="${L('In-/uitklappen','Collapse/expand')}">${col?'▸':'▾'}</button>
       ${(()=>{const m=gmeta(p,g),e=m.icon&&libOf(p).find(x=>x.id===m.icon);return e?`<span class="gi gie" data-gact="ren" title="${L('Groep bewerken','Edit group')}"><img src="${e.img}" alt=""><span class="pen">✎</span></span>`:(col?`<span class="gi gie" data-gact="ren" title="${L('Groep bewerken','Edit group')}">📁<span class="pen">✎</span></span>`:'')})()}<b class="gn">${esc(g)}</b>${(()=>{const m=gmeta(p,g);return (m.icon&&libOf(p).some(x=>x.id===m.icon))||col?'':`<span class="gpen" data-gact="ren" title="${L('Groep bewerken','Edit group')}">✎</span>`})()}<span class="gc">${(()=>{const m=gmeta(p,g);const pl=[m.loc,m.land].filter(Boolean).join(', ');return pl?esc(pl)+' · ':''})()}<span class="gcn" title="${members.length} ${esc(members.length===1?term().one:term().many)}"><span class="ci"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d='M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z'/></svg></span><b>${members.length}</b></span><span class="gcn" title="${L('Computers','Computers')}"><span class="ci"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x='3' y='4' width='18' height='12' rx='2'/><path d='M8 20h8M12 16v4'/></svg></span><b>${members.reduce((a,i)=>a+devsOf(i).length,0)}</b></span></span>
-      ${(()=>{const m=gmeta(p,g);const mq=[m.addr||m.loc,m.land].filter(Boolean).join(', ');return (mq?`<a class="btn uni gl2" href="${esc(launch(mapsUrl(mq)))}" target="_blank" rel="noopener" title="Google Maps: ${esc(mq)}">${ICO_MAP}</a>`:'')+(m.web?`<a class="btn uni gl2" href="${esc(launch(m.web))}" target="_blank" rel="noopener" title="${L('Website','Website')}">${ICO_WEB}</a>`:'')+(m.adv?`<a class="btn uni gl2" href="${esc(launch(m.adv))}" target="_blank" rel="noopener" title="Advertising">${ICO_ADV}</a>`:'')})()}
+      ${(()=>{const m=gmeta(p,g);const mq=[m.addr||m.loc,m.land].filter(Boolean).join(', ');return (mq?`<a class="btn uni gl2" href="${esc(mapsHref((mq)))}" target="_blank" rel="noopener" title="Google Maps: ${esc(mq)}">${ICO_MAP}</a>`:'')+(m.web?`<a class="btn uni gl2" href="${esc(launch(m.web))}" target="_blank" rel="noopener" title="${L('Website','Website')}">${ICO_WEB}</a>`:'')+(m.adv?`<a class="btn uni gl2" href="${esc(launch(m.adv))}" target="_blank" rel="noopener" title="Advertising">${ICO_ADV}</a>`:'')})()}
       <span style="flex:1"></span></div>
       <div class="gbody">${col?'':members.map(j=>cardHTML(j,shown.indexOf(j),p)).join('')}</div></section>`}
   return h}
@@ -1779,7 +1780,7 @@ $('#fGrp').addEventListener('submit',e=>{e.preventDefault();const f=e.target,p=P
   const members=mine().filter(i=>gkey(i.group)===gkey(old));if(gkey(nn)!==gkey(old))delete p.groups[gkey(old)];
   members.forEach(i=>i.group=nn);const m=p.groups[gkey(nn)]||(p.groups[gkey(nn)]={});m.web=fix(f.gweb.value);m.adv=fix(f.gadv.value);m.loc=f.gloc.value.trim();m.land=f.gland.value.trim();m.icon=gIco||'';m.addr=f.gaddr.value.trim();
   save();$('#dlgGrp').close();render();toast(L('Groep opgeslagen','Group saved'))});
-function gMapUpd(){const F=$('#fGrp'),a=[F.gaddr.value.trim()||F.gloc.value.trim(),F.gland.value.trim()].filter(x=>x).join(', '),l=$('#gMapTest');l.style.display=a?'':'none';if(a)l.href=launch(mapsUrl(a))}
+function gMapUpd(){const F=$('#fGrp'),a=[F.gaddr.value.trim()||F.gloc.value.trim(),F.gland.value.trim()].filter(x=>x).join(', '),l=$('#gMapTest');l.style.display=a?'':'none';if(a)l.href=mapsHref((a))}
 ['gaddr','gloc','gland'].forEach(n=>$('#fGrp')[n].addEventListener('input',gMapUpd));
 /* ---------- website zoeken, testen en adres voorstellen ---------- */
 const WF={seq:0,err:0};
@@ -1819,7 +1820,7 @@ async function wfScan(u){const host=wfHost(u);let txt='';try{txt=await tmo(jina(
   const seen=new Set();return all.filter(a=>{const k=a.addr.toLowerCase();if(seen.has(k))return false;seen.add(k);return true}).slice(0,6)}
 function wfBox(id,html){const b=$(id);b.innerHTML=html;b.classList.toggle('on',!!html)}
 function wfAddrShow(list,host){const F=$('#fGrp');
-  const gm=`<span class="wl"><a href="${esc(launch(mapsUrl(wfQuery())))}" target="_blank" rel="noopener">${L('Adres zoeken in Google Maps','Look up the address in Google Maps')} ↗</a></span>`;
+  const gm=`<span class="wl"><a href="${esc(mapsHref((wfQuery())))}" target="_blank" rel="noopener">${L('Adres zoeken in Google Maps','Look up the address in Google Maps')} ↗</a></span>`;
   if(!list||!list.length){wfBox('#gAddrOut',`<span class="wst bad">${L('Geen adres gevonden op','No address found on')} ${esc(host||L('de website','the website'))}.${esc(wfErr())}</span>${gm}`);return}
   wfBox('#gAddrOut',`<span class="wst">${L('Adresvoorstel — tik om in te vullen:','Address suggestion — tap to fill in:')}</span>`+list.map((a,i)=>`<button type="button" class="ghost wsug" data-wa="${i}"><span>📍</span><span>${esc(a.addr)}</span></button>`).join('')+gm);
   $$('#gAddrOut [data-wa]').forEach(b=>b.onclick=()=>{const a=list[+b.dataset.wa];F.gaddr.value=a.addr;if(!F.gloc.value.trim()&&a.city)F.gloc.value=a.city;if(!F.gland.value.trim()&&a.land)F.gland.value=a.land;gMapUpd();$$('#gAddrOut .wsug').forEach(x=>x.classList.toggle('on',x===b));toast(L('Adres ingevuld','Address filled in'))})}
